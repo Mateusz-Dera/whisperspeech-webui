@@ -37,6 +37,8 @@ gettext.textdomain('messages')
 _ = gettext.gettext
 
 # Use user parameter for server port
+# TODO: default values as parameters
+# TODO: language as parameter
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument("--port", "-p", type=int, default=7860, help=_("Specify the server port."))
 parser.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS, help=_("Show this help message and exit."))
@@ -77,6 +79,7 @@ def update(a,b,c,d):
         # TODO: Translations
         print(f_("Error writing audio file: {e}"))
 
+# TODO: Add language selection
 with gr.Blocks(
     theme=gr.themes.Soft(
         primary_hue="orange",
