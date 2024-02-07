@@ -39,6 +39,7 @@ _ = gettext.gettext
 # Use user parameter for server port
 # TODO: default values as parameters
 # TODO: language as parameter
+# TODO: generate output folder if not exists
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument("--port", "-p", type=int, default=7860, help=_("Specify the server port."))
 parser.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS, help=_("Show this help message and exit."))
