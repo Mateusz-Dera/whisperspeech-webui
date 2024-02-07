@@ -61,6 +61,7 @@ def update(a,b,c,d):
     print("Array shape:", audio_np.shape)
     print("Array dtype:", audio_np.dtype)
 
+    # TODO: Select audio format & rate
     try:
         audio_segment = AudioSegment(
             audio_np.tobytes(), 
@@ -73,7 +74,8 @@ def update(a,b,c,d):
         audio_segment.export(filename, format=format)
         print(_("Audio file generated: %s") % filename)
     except Exception as e:
-        print(f"Error writing audio file: {e}")
+        # TODO: Translations
+        print(f_("Error writing audio file: {e}"))
 
 with gr.Blocks(
     theme=gr.themes.Soft(
