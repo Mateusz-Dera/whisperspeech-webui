@@ -27,31 +27,4 @@ Simple WhisperSpeech web UI
 
 3. Select platform:
 
-> [!Important]
->  Only tested installation method is Linux ROCm. Other platforms, using a different GPU or CPU may require manual installation of packages.
-
-ROCm Linux
-1. Install ROCm
-2. Run:
-```bash
-bash ./install_linux_rocm.sh
-```
-3. Run:
-```
-run.sh
-```
-
-Other
-
-1. Create venv
-2. Activate venv
-3. Run:
-```python
-pip install gradio==4.16.0
-```
-4. Clone https://github.com/collabora/WhisperSpeech repository
-5. Install WhisperSpeech
-6. Run:
-```
-python3 ./webui.py
-```
+TODO

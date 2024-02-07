@@ -1,2 +1,4 @@
 .venv
 WhisperSpeech/
+*wav
+*mp3
