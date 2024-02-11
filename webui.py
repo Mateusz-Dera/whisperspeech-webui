@@ -27,16 +27,11 @@ import gettext
 import re
 from datetime import datetime
 
+import torch
 import gradio as gr
 from pydub import AudioSegment
 import numpy as np
 from whisperspeech.pipeline import Pipeline
-
-def split_text(text):
-    sentences_with_tags = re.findall(r'(<en>|<pl>)?\s*([^<]*)', text)
-    sentences = [(tag.strip("<>") if tag else "en", sentence.strip()) for tag, sentence in sentences_with_tags if sentence.strip()]
-
-    return [element[1] for element in sentences],[element[0] for element in sentences]
 
 # Define translation domain and bind it to the 'locales' directory
 gettext.bindtextdomain('messages', localedir='locales')
@@ -54,20 +49,29 @@ args = parser.parse_args()
 
 info = _("This is a simple web UI for the %s project. %s %s") % ("<b>WhisperSpeech</b>","<br>https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI","<br>https://github.com/collabora/WhisperSpeech")
 
-def update(a,b,c,d):
-    import torch 
-    if not torch.cuda.is_available(): 
-        print(_("No CUDA device available."))
+def split_text(text):
+    sentences_with_tags = re.findall(r'(<en>|<pl>)?\s*([^<]*)', text)
+    sentences = [(tag.strip("<>") if tag else "en", sentence.strip()) for tag, sentence in sentences_with_tags if sentence.strip()]
+
+    return [element[1] for element in sentences],[element[0] for element in sentences]
+
+def update(m,t,s,a,af):
+
+    if not torch.cuda.is_available():
+        cuda_device = _("No CUDA device available.")
+        gr.Error(cuda_device) 
+        print(cuda_device)
         return
     else:
         print(_("CUDA device available."))
 
-    print("\n",a,"\n",b,"\n",c,"\n",d)
-    pipe = Pipeline(s2a_ref=a)
+    print("\n",m,"\n",t,"\n",s,"\n",a,"\n",af)
+    pipe = Pipeline(s2a_ref=m)
 
     # TODO: Split by <> and select the language
     speaker = pipe.default_speaker
-    stoks = pipe.t2s.generate(["Dzień dobry.","Hello World!"], cps=14, lang=['pl','en'])[0]
+    split = split_text(t)
+    stoks = pipe.t2s.generate(["Dzień dobry.","Hello World!"], cps=s, lang=['pl','en'])[0]
     atoks = pipe.s2a.generate(stoks, speaker.unsqueeze(0))
     audio_tensor = pipe.vocoder.decode(atoks)
 
@@ -91,13 +95,15 @@ def update(a,b,c,d):
             sample_width=2, 
             channels=1
         )
-        format = 'wav'
-        filename = '%s/outputs/audio_%s.%s' % (os.path.dirname(os.path.realpath(__file__)), datetime.now().strftime('%Y-%m-%d_%H:%M:%S'), format)
-        audio_segment.export(filename, format=format)
+        print(af)
+        filename = '%s/outputs/audio_%s.%s' % (os.path.dirname(os.path.realpath(__file__)), datetime.now().strftime('%Y-%m-%d_%H:%M:%S'), af)
+        audio_segment.export(filename, format=af)
         print(_("Audio file generated: %s") % filename)
     except Exception as e:
         # TODO: Translations
-        print(_("Error:"), f"{e}")
+        file_error = str(_("Error:"), f"{e}")
+        gr.Error(file_error)
+        print(file_error)
 
 # TODO: Add language selection
 with gr.Blocks(
@@ -141,6 +147,14 @@ with gr.Blocks(
             
             gr.Markdown("<br>")
 
+            formats = [
+                "wav",
+                "mp3",
+                "ogg"
+            ]
+
+            audio_format = gr.Dropdown(choices=formats, label=_("Audio format"), value=formats[0], interactive=True)
+
             btn = gr.Button(_("Generate"),variant="primary")
             
         out = gr.Textbox(
@@ -148,7 +162,7 @@ with gr.Blocks(
             interactive = False
         )
         
-        btn.click(fn=update, inputs=[model,text,slider,audio], outputs=out)
+        btn.click(fn=update, inputs=[model,text,slider,audio,audio_format], outputs=out)
 
 # Launch the demo with the specified port
 demo.launch(server_port=args.port)
