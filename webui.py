@@ -24,12 +24,19 @@ import os
 import argparse
 import sys
 import gettext
+import re
 from datetime import datetime
 
 import gradio as gr
 from pydub import AudioSegment
 import numpy as np
 from whisperspeech.pipeline import Pipeline
+
+def split_text(text):
+    sentences_with_tags = re.findall(r'(<en>|<pl>)?\s*([^<]*)', text)
+    sentences = [(tag.strip("<>") if tag else "en", sentence.strip()) for tag, sentence in sentences_with_tags if sentence.strip()]
+
+    return [element[1] for element in sentences],[element[0] for element in sentences]
 
 # Define translation domain and bind it to the 'locales' directory
 gettext.bindtextdomain('messages', localedir='locales')
@@ -48,11 +55,23 @@ args = parser.parse_args()
 info = _("This is a simple web UI for the %s project. %s %s") % ("<b>WhisperSpeech</b>","<br>https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI","<br>https://github.com/collabora/WhisperSpeech")
 
 def update(a,b,c,d):
+    import torch 
+    if not torch.cuda.is_available(): 
+        print(_("No CUDA device available."))
+        return
+    else:
+        print(_("CUDA device available."))
+
     print("\n",a,"\n",b,"\n",c,"\n",d)
     pipe = Pipeline(s2a_ref=a)
 
     # TODO: Split by <> and select the language
-    audio_tensor = pipe.generate(b)
+    speaker = pipe.default_speaker
+    stoks = pipe.t2s.generate(["Dzień dobry.","Hello World!"], cps=14, lang=['pl','en'])[0]
+    atoks = pipe.s2a.generate(stoks, speaker.unsqueeze(0))
+    audio_tensor = pipe.vocoder.decode(atoks)
+
+    # pipe.generate(b)
 
     audio_np = (audio_tensor.cpu().numpy() * 32767).astype(np.int16)
 
@@ -78,7 +97,7 @@ def update(a,b,c,d):
         print(_("Audio file generated: %s") % filename)
     except Exception as e:
         # TODO: Translations
-        print(f_("Error writing audio file: {e}"))
+        print(_("Error:"), f"{e}")
 
 # TODO: Add language selection
 with gr.Blocks(
