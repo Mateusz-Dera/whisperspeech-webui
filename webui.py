@@ -53,7 +53,7 @@ def split_text(text):
     sentences_with_tags = re.findall(r'(<en>|<pl>)?\s*([^<]*)', text)
     sentences = [(tag.strip("<>") if tag else "en", sentence.strip()) for tag, sentence in sentences_with_tags if sentence.strip()]
 
-    return [element[1] for element in sentences],[element[0] for element in sentences]
+    return ["  " + element[1] + "  "  for element in sentences],[element[0] for element in sentences]
 
 def update(m,t,s,a,af):
 
@@ -71,7 +71,9 @@ def update(m,t,s,a,af):
     # TODO: Split by <> and select the language
     speaker = pipe.default_speaker
     split = split_text(t)
-    stoks = pipe.t2s.generate(["Dzień dobry.","Hello World!"], cps=s, lang=['pl','en'])[0]
+    print(split[0])
+    print(split[1])
+    stoks = pipe.t2s.generate(split[0], cps=s, lang=split[1])[0]
     atoks = pipe.s2a.generate(stoks, speaker.unsqueeze(0))
     audio_tensor = pipe.vocoder.decode(atoks)
 
@@ -95,7 +97,6 @@ def update(m,t,s,a,af):
             sample_width=2, 
             channels=1
         )
-        print(af)
         filename = '%s/outputs/audio_%s.%s' % (os.path.dirname(os.path.realpath(__file__)), datetime.now().strftime('%Y-%m-%d_%H:%M:%S'), af)
         audio_segment.export(filename, format=af)
         print(_("Audio file generated: %s") % filename)
@@ -125,18 +126,20 @@ with gr.Blocks(
             ]
 
             model = gr.Dropdown(choices=models, label=_("Model"), value=models[0], interactive=True)
-
+        
             text = gr.Textbox(
                 placeholder=_("Enter your text here..."),
                 label=_("Text"),
-                value=_("<en> This is the text in English.")
+                value=("English is default language.")
             )
-            
+
+            gr.Markdown("You can use the &lt;en&gt; and &lt;pl&gt; tags to change languages and even combine them, but combining languages can give mixed results.")
+
             slider = gr.Slider(
                 label=_("Characters per second"),
                 minimum=10,
                 maximum=15,
-                value=15,
+                value=13.5,
                 step=0.25,
                 interactive=True
             )
