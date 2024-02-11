@@ -133,7 +133,7 @@ with gr.Blocks(
                 value=("English is default language.")
             )
 
-            gr.Markdown("You can use the &lt;en&gt; and &lt;pl&gt; tags to change languages and even combine them, but combining languages can give mixed results.")
+            gr.Markdown("You can use the *&lt;en&gt;* and *&lt;pl&gt;* tags to change languages and even combine them, but combining languages can give mixed results.<br><br>Example:<br>*&lt;pl&gt;To jest tekst w języku polskim.&lt;en&gt; And this is text in English.*")
 
             slider = gr.Slider(
                 label=_("Characters per second"),
