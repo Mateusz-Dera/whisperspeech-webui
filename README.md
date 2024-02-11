@@ -1,5 +1,5 @@
-# WhisperSpeech-Web-UI
-Simple WhisperSpeech web UI
+# WhisperSpeech web UI
+Web UI for WhisperSpeech
 (https://github.com/collabora/WhisperSpeech)
 
 ## Work in progress
