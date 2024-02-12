@@ -30,7 +30,7 @@ from datetime import datetime
 import torch
 import gradio as gr
 from pydub import AudioSegment
-import numpy as np
+import numpy
 from whisperspeech.pipeline import Pipeline
 
 # Define translation domain and bind it to the 'locales' directory
@@ -41,7 +41,6 @@ _ = gettext.gettext
 # Use user parameter for server port
 # TODO: default values as parameters
 # TODO: language as parameter
-# TODO: generate output folder if not exists
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument("--port", "-p", type=int, default=7860, help=_("Specify the server port."))
 parser.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS, help=_("Show this help message and exit."))
@@ -55,7 +54,8 @@ def split_text(text):
 
     return ["  " + element[1] + "  "  for element in sentences],[element[0] for element in sentences]
 
-def update(m,t,s,a,af):
+# Model, text, slider value, voice, audio format
+def update(m,t,s,v,af):
 
     if not torch.cuda.is_available():
         cuda_device = _("No CUDA device available.")
@@ -65,34 +65,25 @@ def update(m,t,s,a,af):
     else:
         print(_("CUDA device available."))
 
-    print("\n",m,"\n",t,"\n",s,"\n",a,"\n",af)
+    print("\n",m,"\n",t,"\n",s,"\n",v,"\n",af)
     pipe = Pipeline(s2a_ref=m)
 
-    # TODO: Split by <> and select the language
     speaker = pipe.default_speaker
     split = split_text(t)
     print(split[0])
     print(split[1])
-    stoks = pipe.t2s.generate(split[0], cps=s, lang=split[1])[0]
-    atoks = pipe.s2a.generate(stoks, speaker.unsqueeze(0))
-    audio_tensor = pipe.vocoder.decode(atoks)
+    tensor = pipe.vocoder.decode(pipe.s2a.generate(pipe.t2s.generate(split[0], cps=s, lang=split[1])[0], speaker.unsqueeze(0)))
 
-    # pipe.generate(b)
+    np = (tensor.cpu().numpy() * 32767).astype(numpy.int16)
 
-    audio_np = (audio_tensor.cpu().numpy() * 32767).astype(np.int16)
-
-    if len(audio_np.shape) == 1:
-        audio_np = np.expand_dims(audio_np, axis=0)
+    if len(np.shape) == 1:
+        np = np.expand_dims(np, axis=0)
     else:
-        audio_np = audio_np.T
+        np = np.T
 
-    print("Array shape:", audio_np.shape)
-    print("Array dtype:", audio_np.dtype)
-
-    # TODO: Select audio format & rate
     try:
         audio_segment = AudioSegment(
-            audio_np.tobytes(), 
+            np.tobytes(), 
             frame_rate=24000, 
             sample_width=2, 
             channels=1
@@ -144,7 +135,7 @@ with gr.Blocks(
                 interactive=True
             )
             
-            audio = gr.Audio(
+            voice = gr.Audio(
                 label=_("Voice to clone (optional)"),
             )
             
@@ -165,7 +156,7 @@ with gr.Blocks(
             interactive = False
         )
         
-        btn.click(fn=update, inputs=[model,text,slider,audio,audio_format], outputs=out)
+        btn.click(fn=update, inputs=[model,text,slider,voice,audio_format], outputs=out)
 
 # Launch the demo with the specified port
 demo.launch(server_port=args.port)
