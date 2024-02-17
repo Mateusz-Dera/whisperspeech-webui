@@ -13,9 +13,9 @@ Web UI for WhisperSpeech
 |CPU|AMD Ryzen 7900X3D (iGPU disabled in BIOS)|
 |GPU|AMD Radeon 7900XTX|
 |RAM|64GB DDR5 6600MHz|
-|Motherboard|ASRock B650E PG Riptide WiFi (2.06.AS03 [Beta])|
+|Motherboard|ASRock B650E PG Riptide WiFi (2.08.AS01 [Beta])|
 |OS|Ubuntu 22.04|
-|Kernel|6.5.0-15-generic|
+|Kernel|6.5.0-18-generic|
 |ROCm|6.0|
 
 ## Instalation:
@@ -25,6 +25,24 @@ Web UI for WhisperSpeech
 
 3. Mount the repository directory.
 
-3. Select platform:
+3. Create and activate venv
 
-TODO
+4. For ROCm set HSA_OVERRIDE_GFX_VERSION.
+* For the Radeon 7900XTX:
+```bash
+export HSA_OVERRIDE_GFX_VERSION=11.0.0
+```
+5. Install requirements
+* For ROCm:
+```bash
+pip install -r requirements_rocm.txt
+pip install git+https://github.com/ROCmSoftwarePlatform/flash-attention.git@ae7928c5aed53cf6e75cc792baa9126b2abfcf1a
+```
+* For CUDA:
+```bash
+Not yet tested.
+```
+6. Run:
+```bash
+python webui.py
+```
