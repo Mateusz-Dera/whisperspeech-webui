@@ -1,0 +1,85 @@
+# Translations template for PROJECT.
+# Copyright (C) 2024 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2024-02-17 16:30+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: webui.py:45
+msgid "Specify the server port."
+msgstr ""
+
+#: webui.py:46
+msgid "Show this help message and exit."
+msgstr ""
+
+#: webui.py:49
+#, python-format
+msgid "This is a simple web UI for the %s project. %s %s"
+msgstr ""
+
+#: webui.py:61
+msgid "No CUDA device available."
+msgstr ""
+
+#: webui.py:66
+msgid "CUDA device available."
+msgstr ""
+
+#: webui.py:93
+#, python-format
+msgid "Audio file generated: %s"
+msgstr ""
+
+#: webui.py:96
+msgid "Error:"
+msgstr ""
+
+#: webui.py:106
+msgid "WhisperSpeech Web UI"
+msgstr ""
+
+#: webui.py:119
+msgid "Model"
+msgstr ""
+
+#: webui.py:122
+msgid "Enter your text here..."
+msgstr ""
+
+#: webui.py:123
+msgid "Text"
+msgstr ""
+
+#: webui.py:130
+msgid "Characters per second"
+msgstr ""
+
+#: webui.py:139
+msgid "Voice to clone (optional)"
+msgstr ""
+
+#: webui.py:150
+msgid "Audio format"
+msgstr ""
+
+#: webui.py:152
+msgid "Generate"
+msgstr ""
+
+#: webui.py:155
+msgid "Output"
+msgstr ""
+

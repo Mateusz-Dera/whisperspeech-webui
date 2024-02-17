@@ -1,0 +1,86 @@
+# Polish (Poland) translations for PROJECT.
+# Copyright (C) 2024 Mateusz Dera
+# This file is distributed under the same license as the PROJECT project.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2024-02-17 16:30+0100\n"
+"PO-Revision-Date: 2024-02-17 16:31+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: pl_PL\n"
+"Language-Team: pl_PL <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && "
+"(n%100<10 || n%100>=20) ? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: webui.py:45
+msgid "Specify the server port."
+msgstr "Port serwera."
+
+#: webui.py:46
+msgid "Show this help message and exit."
+msgstr "Wyświetl ten komunikat pomocy i zakończ program."
+
+#: webui.py:49
+#, python-format
+msgid "This is a simple web UI for the %s project. %s %s"
+msgstr "Prosty interfejs dla %s. %s %s"
+
+#: webui.py:61
+msgid "No CUDA device available."
+msgstr "Brak dostępnego urządzenia wspierającego CUDA."
+
+#: webui.py:66
+msgid "CUDA device available."
+msgstr "Urządzenie wspierające CUDA jest dostępne."
+
+#: webui.py:93
+#, python-format
+msgid "Audio file generated: %s"
+msgstr "Wygenerowany plik audio: %s"
+
+#: webui.py:96
+msgid "Error:"
+msgstr "Błąd:"
+
+#: webui.py:106
+msgid "WhisperSpeech Web UI"
+msgstr "WhisperSpeech Web UI"
+
+#: webui.py:119
+msgid "Model"
+msgstr "Model"
+
+#: webui.py:122
+msgid "Enter your text here..."
+msgstr "Wpisz swój tekst tutaj..."
+
+#: webui.py:123
+msgid "Text"
+msgstr "Tekst"
+
+#: webui.py:130
+msgid "Characters per second"
+msgstr "Znaki na sekundę"
+
+#: webui.py:139
+msgid "Voice to clone (optional)"
+msgstr "Głos do sklonowania (opcjonalny)"
+
+#: webui.py:150
+msgid "Audio format"
+msgstr "Format pliku audio"
+
+#: webui.py:152
+msgid "Generate"
+msgstr "Generuj"
+
+#: webui.py:155
+msgid "Output"
+msgstr "Efek końcowy"
+
