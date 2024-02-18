@@ -70,6 +70,13 @@ def update(m,t,s,v,af):
     pipe = Pipeline(s2a_ref=m)
 
     speaker = pipe.default_speaker
+
+    # if v != None:
+        # speaker = pipe.extract_spk_emb(v)
+
+    print("----------------------------------------------")
+    print(v)
+
     split = split_text(t)
     print(split[0])
     print(split[1])
@@ -92,6 +99,7 @@ def update(m,t,s,v,af):
         filename = '%s/outputs/audio_%s.%s' % (os.path.dirname(os.path.realpath(__file__)), datetime.now().strftime('%Y-%m-%d_%H:%M:%S'), af)
         audio_segment.export(filename, format=af)
         print(_("Audio file generated: %s") % filename)
+        return filename
     except Exception as e:
         file_error = str(_("Error:"), f"{e}")
         gr.Error(file_error)
