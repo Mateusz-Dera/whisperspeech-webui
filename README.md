@@ -2,10 +2,10 @@
 Web UI for WhisperSpeech
 (https://github.com/collabora/WhisperSpeech)
 
-## Work in progress
+![Preview](screenshot.png)
 
 ## Info
-[![Version](https://img.shields.io/badge/0.1-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
+[![Version](https://img.shields.io/badge/1.0-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
 
 ### Test platform:
 |Name|Info|
