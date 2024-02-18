@@ -43,7 +43,7 @@ _ = gettext.gettext
 # TODO: language as parameter
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument("-p", "--port", type=int, default=7860, help=_("Specify the server port."))
-parser.add_argument('-a', '--auth', metavar=('<user>:<password>'), help=_("Enter the username and password for authorization."))
+parser.add_argument('-a', '--auth', metavar=(_("<user>:<password>")), help=_("Enter the username and password for authorization."))
 parser.add_argument('-l', '--listen', action='store_true', help=_("Host the app on the local network."))
 parser.add_argument('-s', '--share', action='store_true', help=_("Create a public sharing tunnel."))
 parser.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS, help=_("Show this help message and exit."))

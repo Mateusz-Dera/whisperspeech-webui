@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-02-18 13:15+0100\n"
+"POT-Creation-Date: 2024-02-18 14:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,78 +22,98 @@ msgid "Specify the server port."
 msgstr ""
 
 #: webui.py:46
-msgid "Show this help message and exit."
+msgid "<user>:<password>"
+msgstr ""
+
+#: webui.py:46
+msgid "Enter the username and password for authorization."
+msgstr ""
+
+#: webui.py:47
+msgid "Host the app on the local network."
+msgstr ""
+
+#: webui.py:48
+msgid "Create a public sharing tunnel."
 msgstr ""
 
 #: webui.py:49
+msgid "Show this help message and exit."
+msgstr ""
+
+#: webui.py:52
 #, python-format
 msgid "This is a simple web UI for the %s project. %s %s"
 msgstr ""
 
-#: webui.py:61
+#: webui.py:64
 msgid "No CUDA device available."
 msgstr ""
 
-#: webui.py:66
+#: webui.py:69
 msgid "CUDA device available."
 msgstr ""
 
-#: webui.py:93
+#: webui.py:96
 #, python-format
 msgid "Audio file generated: %s"
 msgstr ""
 
-#: webui.py:96
+#: webui.py:99
 msgid "Error:"
 msgstr ""
 
-#: webui.py:106
+#: webui.py:109
 msgid "WhisperSpeech Web UI"
 msgstr ""
 
-#: webui.py:119
+#: webui.py:122
 msgid "Model"
 msgstr ""
 
-#: webui.py:122
+#: webui.py:125
 msgid "Enter your text here..."
 msgstr ""
 
-#: webui.py:123
+#: webui.py:126
 msgid "Text"
 msgstr ""
 
-#: webui.py:127
+#: webui.py:130
 msgid ""
 "You can use the *&lt;en&gt;* and *&lt;pl&gt;* tags to change languages "
 "and even combine them."
 msgstr ""
 
-#: webui.py:128
+#: webui.py:131
 msgid "Combining languages can produce mixed results."
 msgstr ""
 
-#: webui.py:129
+#: webui.py:132
 msgid "Example:"
 msgstr ""
 
-#: webui.py:133
+#: webui.py:136
 msgid "Characters per second"
 msgstr ""
 
-#: webui.py:142
+#: webui.py:145
 msgid "Voice to clone (optional)"
 msgstr ""
 
-#: webui.py:153
+#: webui.py:156
 msgid "Audio format"
 msgstr ""
 
-#: webui.py:155
+#: webui.py:158
 msgid "Generate"
 msgstr ""
 
-#: webui.py:158
+#: webui.py:161
 msgid "Output"
+msgstr ""
+
+#: webui.py:179
+msgid "Invalid username and/or password."
 msgstr ""
 
