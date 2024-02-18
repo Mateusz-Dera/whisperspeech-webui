@@ -34,7 +34,7 @@ import numpy
 from whisperspeech.pipeline import Pipeline
 
 # Define translation domain and bind it to the 'locales' directory
-gettext.bindtextdomain('messages', localedir='locales')
+gettext.bindtextdomain('messages', localedir='locale')
 gettext.textdomain('messages')
 _ = gettext.gettext
 
