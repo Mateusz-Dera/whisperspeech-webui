@@ -46,6 +46,10 @@ Not yet tested.
 ```bash
 python webui.py
 ```
+* With -h or --help for help:
+```bash
+python webui.py -h
+```
 
 <!-- TRANSLATION -->
 <!-- PYBABEL -->
