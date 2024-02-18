@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-02-17 16:30+0100\n"
+"POT-Creation-Date: 2024-02-18 13:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,23 +63,37 @@ msgstr ""
 msgid "Text"
 msgstr ""
 
-#: webui.py:130
+#: webui.py:127
+msgid ""
+"You can use the *&lt;en&gt;* and *&lt;pl&gt;* tags to change languages "
+"and even combine them."
+msgstr ""
+
+#: webui.py:128
+msgid "Combining languages can produce mixed results."
+msgstr ""
+
+#: webui.py:129
+msgid "Example:"
+msgstr ""
+
+#: webui.py:133
 msgid "Characters per second"
 msgstr ""
 
-#: webui.py:139
+#: webui.py:142
 msgid "Voice to clone (optional)"
 msgstr ""
 
-#: webui.py:150
+#: webui.py:153
 msgid "Audio format"
 msgstr ""
 
-#: webui.py:152
+#: webui.py:155
 msgid "Generate"
 msgstr ""
 
-#: webui.py:155
+#: webui.py:158
 msgid "Output"
 msgstr ""
 

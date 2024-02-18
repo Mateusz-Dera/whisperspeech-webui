@@ -1,13 +1,14 @@
 # Polish (Poland) translations for PROJECT.
-# Copyright (C) 2024 Mateusz Dera
+# Copyright (C) 2024 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-02-17 16:30+0100\n"
-"PO-Revision-Date: 2024-02-17 16:31+0100\n"
+"POT-Creation-Date: 2024-02-18 13:15+0100\n"
+"PO-Revision-Date: 2024-02-18 12:55+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pl_PL\n"
 "Language-Team: pl_PL <LL@li.org>\n"
@@ -64,23 +65,49 @@ msgstr "Wpisz swój tekst tutaj..."
 msgid "Text"
 msgstr "Tekst"
 
-#: webui.py:130
+#: webui.py:127
+msgid ""
+"You can use the *&lt;en&gt;* and *&lt;pl&gt;* tags to change languages "
+"and even combine them."
+msgstr ""
+"Możesz używać znaczników *&lt;en&gt;* oraz *&lt;pl&gt;* do przełączania się między językami "
+"lub łączenia ich."
+
+#: webui.py:128
+msgid "Combining languages can produce mixed results."
+msgstr "Łączenie języków może powodować mieszane rezultaty."
+
+#: webui.py:129
+msgid "Example:"
+msgstr "Przykład:"
+
+#: webui.py:133
 msgid "Characters per second"
 msgstr "Znaki na sekundę"
 
-#: webui.py:139
+#: webui.py:142
 msgid "Voice to clone (optional)"
 msgstr "Głos do sklonowania (opcjonalny)"
 
-#: webui.py:150
+#: webui.py:153
 msgid "Audio format"
 msgstr "Format pliku audio"
 
-#: webui.py:152
+#: webui.py:155
 msgid "Generate"
 msgstr "Generuj"
 
-#: webui.py:155
+#: webui.py:158
 msgid "Output"
 msgstr "Efek końcowy"
+
+#~ msgid ""
+#~ "You can use the *&lt;en&gt;* and "
+#~ "*&lt;pl&gt;* tags to change languages "
+#~ "and even combine them, but combining "
+#~ "languages can give mixed "
+#~ "results.<br><br>Example:<br>*&lt;pl&gt;To jest tekst "
+#~ "w języku polskim.&lt;en&gt; And this is"
+#~ " text in English.*"
+#~ msgstr ""
 

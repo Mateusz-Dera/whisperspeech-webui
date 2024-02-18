@@ -46,3 +46,14 @@ Not yet tested.
 ```bash
 python webui.py
 ```
+
+<!-- TRANSLATION -->
+<!-- PYBABEL -->
+<!-- EXTRACT -->
+<!-- pybabel extract -F babel.cfg -o ./locale/messages.pot . -->
+<!-- UPDATE -->
+<!-- pybabel update -i ./locale/messages.pot -d ./locale -->
+<!-- NEW LANGUAGE -->
+<!-- pybabel init -i ./locale/messages.pot -d ./locale -l pl_PL -->
+<!-- COMPILE -->
+<!-- pybabel compile -d ./locale -->
