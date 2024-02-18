@@ -39,8 +39,6 @@ gettext.textdomain('messages')
 _ = gettext.gettext
 
 # Use user parameter for server port
-# TODO: default values as parameters
-# TODO: language as parameter
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument("-p", "--port", type=int, default=7860, help=_("Specify the server port."))
 parser.add_argument('-a', '--auth', metavar=(_("<user>:<password>")), help=_("Enter the username and password for authorization."))
@@ -95,12 +93,10 @@ def update(m,t,s,v,af):
         audio_segment.export(filename, format=af)
         print(_("Audio file generated: %s") % filename)
     except Exception as e:
-        # TODO: Translations
         file_error = str(_("Error:"), f"{e}")
         gr.Error(file_error)
         print(file_error)
 
-# TODO: Add language selection
 with gr.Blocks(
     theme=gr.themes.Soft(
         primary_hue="orange",
