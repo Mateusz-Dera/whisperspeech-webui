@@ -156,20 +156,23 @@ with gr.Blocks(
 
             btn = gr.Button(_("Generate"),variant="primary")
             
-        out = gr.Textbox(
+        out = gr.Audio(
             label=_("Output"),
             interactive = False
         )
         
         btn.click(fn=update, inputs=[model,text,slider,voice,audio_format], outputs=out)
 
-# Launch the demo with the specified port
+# Args
 if args.auth != None:
     try:
         user, password = args.auth.split(":")
-        demo.launch(server_port=args.port, auth=(user, password), share=args.share)
+        if user == "" or password == "" or user == None or password == None:
+            raise Exception
     except:
         print(_("Invalid username and/or password."))
         sys.exit(1)
-else:
-    demo.launch(server_port=args.port, share=args.share)
+
+    demo.launch(server_port=args.port, auth=(user,password), share=args.share)
+
+demo.launch(server_port=args.port, share=args.share)
