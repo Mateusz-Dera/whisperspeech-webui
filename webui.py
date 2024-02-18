@@ -71,11 +71,8 @@ def update(m,t,s,v,af):
 
     speaker = pipe.default_speaker
 
-    # if v != None:
-        # speaker = pipe.extract_spk_emb(v)
-
-    print("----------------------------------------------")
-    print(v)
+    if v != None:
+        speaker = pipe.extract_spk_emb(v)
 
     split = split_text(t)
     print(split[0])
@@ -147,6 +144,7 @@ with gr.Blocks(
             
             voice = gr.Audio(
                 label=_("Voice to clone (optional)"),
+                type="filepath"
             )
             
             gr.Markdown("<br>")
