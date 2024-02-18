@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-02-18 14:39+0100\n"
+"POT-Creation-Date: 2024-02-18 20:03+0100\n"
 "PO-Revision-Date: 2024-02-18 12:55+0100\n"
 "Last-Translator: Mateusz Dera\n"
 "Language: pl_PL\n"
@@ -19,69 +19,70 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.14.0\n"
 
-#: webui.py:43
+#: webui.py:44
 msgid "Specify the server port."
 msgstr "Port serwera."
 
-#: webui.py:44
-msgid "<user>:<password>"
-msgstr "<użytkownik>:<hasło>"
-
-#: webui.py:44
-msgid "Enter the username and password for authorization."
-msgstr "Podaj użytkownika oraz hasło do logowania."
+#: webui.py:45
+msgid "<u>:<p>"
+msgstr "<u>:<h>"
 
 #: webui.py:45
+#, fuzzy
+msgid "Enter the username <u> and password <p> for authorization."
+msgstr "Podaj użytkownika <u> oraz hasło <h> do logowania."
+
+#: webui.py:46
 msgid "Host the app on the local network."
 msgstr "Udostępnij aplikację w sieci lokalnej."
 
-#: webui.py:46
+#: webui.py:47
 msgid "Create a public sharing tunnel."
 msgstr "Utwórz publiczny tunel do udostępniania aplikacji."
 
-#: webui.py:47
+#: webui.py:48
 msgid "Show this help message and exit."
 msgstr "Wyświetl ten komunikat pomocy i zakończ program."
 
-#: webui.py:50
+#: webui.py:51
 #, python-format
 msgid "This is a simple web UI for the %s project. %s %s"
 msgstr "Prosty interfejs dla %s. %s %s"
 
-#: webui.py:62
+#: webui.py:63
 msgid "No CUDA device available."
 msgstr "Brak dostępnego urządzenia wspierającego CUDA."
 
-#: webui.py:67
+#: webui.py:68
 msgid "CUDA device available."
 msgstr "Urządzenie wspierające CUDA jest dostępne."
 
-#: webui.py:94
+#: webui.py:99
 #, python-format
 msgid "Audio file generated: %s"
 msgstr "Wygenerowany plik audio: %s"
 
-#: webui.py:96
+#: webui.py:102
 msgid "Error:"
 msgstr "Błąd:"
 
-#: webui.py:105
+#: webui.py:111
 msgid "WhisperSpeech Web UI"
 msgstr "WhisperSpeech Web UI"
 
-#: webui.py:118
+#: webui.py:124
 msgid "Model"
 msgstr "Model"
 
-#: webui.py:121
+#: webui.py:127
 msgid "Enter your text here..."
 msgstr "Wpisz swój tekst tutaj..."
 
-#: webui.py:122
+#: webui.py:128
 msgid "Text"
 msgstr "Tekst"
 
-#: webui.py:126
+#: webui.py:132
 msgid ""
 "You can use the *&lt;en&gt;* and *&lt;pl&gt;* tags to change languages "
 "and even combine them."
@@ -89,35 +90,35 @@ msgstr ""
 "Możesz używać znaczników *&lt;en&gt;* oraz *&lt;pl&gt;* do przełączania "
 "się między językami lub łączenia ich."
 
-#: webui.py:127
+#: webui.py:133
 msgid "Combining languages can produce mixed results."
 msgstr "Łączenie języków może powodować mieszane rezultaty."
 
-#: webui.py:128
+#: webui.py:134
 msgid "Example:"
 msgstr "Przykład:"
 
-#: webui.py:132
+#: webui.py:138
 msgid "Characters per second"
 msgstr "Znaki na sekundę"
 
-#: webui.py:141
+#: webui.py:147
 msgid "Voice to clone (optional)"
 msgstr "Głos do sklonowania (opcjonalny)"
 
-#: webui.py:152
+#: webui.py:159
 msgid "Audio format"
 msgstr "Format pliku audio"
 
-#: webui.py:154
+#: webui.py:161
 msgid "Generate"
 msgstr "Generuj"
 
-#: webui.py:157
+#: webui.py:164
 msgid "Output"
 msgstr "Efek końcowy"
 
-#: webui.py:175
+#: webui.py:182
 msgid "Invalid username and/or password."
 msgstr "Błędny użytkownik i/lub hasło."
 

@@ -29,8 +29,9 @@ from datetime import datetime
 
 import torch
 import gradio as gr
-from pydub import AudioSegment
 import numpy
+from pydub import AudioSegment
+from rich_argparse import RichHelpFormatter
 from whisperspeech.pipeline import Pipeline
 
 # Define translation domain and bind it to the 'locales' directory
@@ -39,9 +40,9 @@ gettext.textdomain('messages')
 _ = gettext.gettext
 
 # Use user parameter for server port
-parser = argparse.ArgumentParser(add_help=False)
+parser = argparse.ArgumentParser(add_help=False, formatter_class=RichHelpFormatter)
 parser.add_argument("-p", "--port", type=int, default=7860, help=_("Specify the server port."))
-parser.add_argument('-a', '--auth', metavar=(_("<user>:<password>")), help=_("Enter the username and password for authorization."))
+parser.add_argument('-a', '--auth', metavar=(_("<u>:<p>")), help=_("Enter the username <u> and password <p> for authorization."))
 parser.add_argument('-l', '--listen', action='store_true', help=_("Host the app on the local network."))
 parser.add_argument('-s', '--share', action='store_true', help=_("Create a public sharing tunnel."))
 parser.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS, help=_("Show this help message and exit."))
