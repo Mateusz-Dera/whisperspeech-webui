@@ -42,7 +42,9 @@ _ = gettext.gettext
 # TODO: default values as parameters
 # TODO: language as parameter
 parser = argparse.ArgumentParser(add_help=False)
-parser.add_argument("--port", "-p", type=int, default=7860, help=_("Specify the server port."))
+parser.add_argument("-p", "--port", type=int, default=7860, help=_("Specify the server port."))
+parser.add_argument('-a', '--auth', metavar=('<user>:<password>'), help=_("Enter the username and password for authorization."))
+parser.add_argument('-s', '--share', action='store_true', help=_("Create public share tunel."))
 parser.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS, help=_("Show this help message and exit."))
 args = parser.parse_args()
 
@@ -162,4 +164,12 @@ with gr.Blocks(
         btn.click(fn=update, inputs=[model,text,slider,voice,audio_format], outputs=out)
 
 # Launch the demo with the specified port
-demo.launch(server_port=args.port)
+if args.auth != None:
+    try:
+        user, password = args.auth.split(":")
+        demo.launch(server_port=args.port, auth=(user, password), share=args.share)
+    except:
+        print(_("Invalid username and/or password."))
+        sys.exit(1)
+else:
+    demo.launch(server_port=args.port, share=args.share)
