@@ -5,7 +5,7 @@ Web UI for WhisperSpeech
 ![Preview](screenshot.png)
 
 ## Info
-[![Version](https://img.shields.io/badge/1.0-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
+[![Version](https://img.shields.io/badge/1.1-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
 
 ### Test platform:
 |Name|Info|
@@ -32,16 +32,25 @@ Web UI for WhisperSpeech
 ```bash
 export HSA_OVERRIDE_GFX_VERSION=11.0.0
 ```
+
 5. Install requirements
 * For ROCm:
 ```bash
 pip install -r requirements_rocm.txt
 pip install git+https://github.com/ROCmSoftwarePlatform/flash-attention.git@ae7928c5aed53cf6e75cc792baa9126b2abfcf1a
 ```
-* For CUDA:
+* For CUDA (Tested on Ubuntu 23.10):
+* 
+a) CUDA 11.8
 ```bash
-Not yet tested.
+pip install -r requrements_cuda_11.8.txt
 ```
+
+a) CUDA 12.1
+```bash
+pip install -r requrements_cuda_12.1.txt
+```
+
 6. Run:
 ```bash
 python webui.py
