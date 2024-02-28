@@ -46,7 +46,7 @@ a) CUDA 11.8
 pip install -r requrements_cuda_11.8.txt
 ```
 
-a) CUDA 12.1
+b) CUDA 12.1
 ```bash
 pip install -r requrements_cuda_12.1.txt
 ```
