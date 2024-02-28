@@ -39,14 +39,13 @@ export HSA_OVERRIDE_GFX_VERSION=11.0.0
 pip install -r requirements_rocm.txt
 pip install git+https://github.com/ROCmSoftwarePlatform/flash-attention.git@ae7928c5aed53cf6e75cc792baa9126b2abfcf1a
 ```
-* For CUDA (Tested on Ubuntu 23.10):
  
-a) CUDA 11.8
+* CUDA 11.8 (Tested on Ubuntu 23.10):
 ```bash
 pip install -r requrements_cuda_11.8.txt
 ```
 
-b) CUDA 12.1
+* CUDA 12.1 (Tested on Ubuntu 23.10):
 ```bash
 pip install -r requrements_cuda_12.1.txt
 ```
