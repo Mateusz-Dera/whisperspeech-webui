@@ -41,12 +41,12 @@ pip install git+https://github.com/ROCmSoftwarePlatform/flash-attention.git@ae79
 ```
 * For CUDA (Tested on Ubuntu 23.10):
 * 
-a) CUDA 11.8
+- CUDA 11.8
 ```bash
 pip install -r requrements_cuda_11.8.txt
 ```
 
-b) CUDA 12.1
+- CUDA 12.1
 ```bash
 pip install -r requrements_cuda_12.1.txt
 ```
