@@ -40,13 +40,13 @@ pip install -r requirements_rocm.txt
 pip install git+https://github.com/ROCmSoftwarePlatform/flash-attention.git@ae7928c5aed53cf6e75cc792baa9126b2abfcf1a
 ```
 * For CUDA (Tested on Ubuntu 23.10):
-* 
-- CUDA 11.8
+ 
+a) CUDA 11.8
 ```bash
 pip install -r requrements_cuda_11.8.txt
 ```
 
-- CUDA 12.1
+b) CUDA 12.1
 ```bash
 pip install -r requrements_cuda_12.1.txt
 ```
