@@ -5,7 +5,7 @@ Web UI for WhisperSpeech
 ![Preview](screenshot.png)
 
 ## Info
-[![Version](https://img.shields.io/badge/1.1-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
+[![Version](https://img.shields.io/badge/1.2-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
 
 ### Test platform:
 |Name|Info|
@@ -13,10 +13,10 @@ Web UI for WhisperSpeech
 |CPU|AMD Ryzen 7900X3D (iGPU disabled in BIOS)|
 |GPU|AMD Radeon 7900XTX|
 |RAM|64GB DDR5 6600MHz|
-|Motherboard|ASRock B650E PG Riptide WiFi (2.08.AS01 [Beta])|
+|Motherboard|ASRock B650E PG Riptide WiFi (2.10)|
 |OS|Ubuntu 22.04|
-|Kernel|6.5.0-18-generic|
-|ROCm|6.0|
+|Kernel|6.5.0-28-generic|
+|ROCm|6.1|
 
 ## Instalation:
 1. Install Python 3.11
@@ -34,10 +34,16 @@ export HSA_OVERRIDE_GFX_VERSION=11.0.0
 ```
 
 5. Install requirements
-* For ROCm:
+* ROCm 5.7:
 ```bash
-pip install -r requirements_rocm.txt
+pip install -r requirements_rocm_5.7.txt
 pip install git+https://github.com/ROCmSoftwarePlatform/flash-attention.git@ae7928c5aed53cf6e75cc792baa9126b2abfcf1a
+```
+
+* ROCm 6.0:
+```bash
+pip install -r requirements_rocm_6.0.txt
+pip install git+https://github.com/ROCmSoftwarePlatform/flash-attention.git@2554f490101742ccdc56620a938f847f61754be6
 ```
  
 * CUDA 11.8 (Tested on Ubuntu 23.10):
