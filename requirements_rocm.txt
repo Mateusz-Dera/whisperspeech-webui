@@ -1,3 +1,4 @@
+--extra-index-url https://download.pytorch.org/whl/rocm6.0
 aiofiles==23.2.1
 altair==5.3.0
 annotated-types==0.7.0

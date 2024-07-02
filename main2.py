@@ -27,6 +27,10 @@ import gettext
 import re
 from datetime import datetime
 import threading
+import json
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from urllib.parse import parse_qs
+import socket
 
 import torch
 import gradio as gr
@@ -34,7 +38,6 @@ import numpy
 from pydub import AudioSegment
 from rich_argparse import RichHelpFormatter
 from whisperspeech.pipeline import Pipeline
-from flask import Flask, request, send_file
 
 # Define translation domain and bind it to the 'locales' directory
 gettext.bindtextdomain('messages', localedir='locale')
@@ -47,6 +50,18 @@ MODELS = {
     "tiny": "collabora/whisperspeech:s2a-q4-tiny-en+pl.model",
     "base": "collabora/whisperspeech:s2a-q4-base-en+pl.model"
 }
+
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except Exception:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
 
 # Use user parameter for server port
 parser = argparse.ArgumentParser(add_help=False, formatter_class=RichHelpFormatter)
@@ -73,7 +88,6 @@ def split_text(text):
 
 # Model, text, slider value, voice, audio format
 def update(m,t,s,v,af):
-
     if not torch.cuda.is_available():
         cuda_device = _("No CUDA device available.")
         gr.Error(cuda_device) 
@@ -118,25 +132,43 @@ def update(m,t,s,v,af):
         print(file_error)
 
 # API functionality
-app = Flask(__name__)
+class WhisperSpeechHandler(BaseHTTPRequestHandler):
+    def do_POST(self):
+        if self.path == '/generate':
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            data = json.loads(post_data.decode('utf-8'))
 
-@app.route('/generate', methods=['POST'])
-def generate_audio():
-    data = request.json
-    text = data.get('text', '')
-    speed = data.get('speed', 13.5)
-    audio_format = data.get('format', 'wav')
+            text = data.get('text', '')
+            speed = data.get('speed', 13.5)
+            audio_format = data.get('format', 'wav')
 
-    # Use the default model for API requests
-    output_file = update(default_model, text, speed, None, audio_format)
+            output_file = update(default_model, text, speed, None, audio_format)
 
-    if output_file:
-        return send_file(output_file, as_attachment=True)
-    else:
-        return "Error generating audio", 500
+            if output_file:
+                self.send_response(200)
+                self.send_header('Content-type', f'audio/{audio_format}')
+                self.send_header('Access-Control-Allow-Origin', '*')  # Allow CORS
+                self.end_headers()
+                with open(output_file, 'rb') as file:
+                    self.wfile.write(file.read())
+            else:
+                self.send_error(500, "Error generating audio")
+        else:
+            self.send_error(404, "Not Found")
 
-def run_api():
-    app.run(host='0.0.0.0', port=args.api_port)
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.end_headers()
+
+def run_api(host, port):
+    server_address = (host, port)
+    httpd = HTTPServer(server_address, WhisperSpeechHandler)
+    print(f"API running on http://{host}:{port}")
+    httpd.serve_forever()
 
 # Gradio UI setup
 with gr.Blocks(
@@ -200,14 +232,19 @@ with gr.Blocks(
 # Main execution
 if __name__ == "__main__":
     host = "127.0.0.1"
-    if args.listen:
+    if args.listen or args.share:
         host = "0.0.0.0"
 
     # Start API in a separate thread if enabled
     if args.api:
-        api_thread = threading.Thread(target=run_api)
+        api_host = host
+        api_thread = threading.Thread(target=run_api, args=(api_host, args.api_port))
         api_thread.start()
-        print(f"API running on port {args.api_port}")
+        
+        if api_host == "0.0.0.0":
+            print(f"API accessible at:")
+            print(f"  - http://localhost:{args.api_port}")
+            print(f"  - http://{get_ip()}:{args.api_port}")
 
     # Launch Gradio UI
     if args.auth is not None:
