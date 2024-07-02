@@ -26,6 +26,7 @@ import sys
 import gettext
 import re
 from datetime import datetime
+import threading
 
 import torch
 import gradio as gr
@@ -33,20 +34,34 @@ import numpy
 from pydub import AudioSegment
 from rich_argparse import RichHelpFormatter
 from whisperspeech.pipeline import Pipeline
+from flask import Flask, request, send_file
 
 # Define translation domain and bind it to the 'locales' directory
 gettext.bindtextdomain('messages', localedir='locale')
 gettext.textdomain('messages')
 _ = gettext.gettext
 
+# Define available models
+MODELS = {
+    "small": "collabora/whisperspeech:s2a-q4-small-en+pl.model",
+    "tiny": "collabora/whisperspeech:s2a-q4-tiny-en+pl.model",
+    "base": "collabora/whisperspeech:s2a-q4-base-en+pl.model"
+}
+
 # Use user parameter for server port
 parser = argparse.ArgumentParser(add_help=False, formatter_class=RichHelpFormatter)
-parser.add_argument("-p", "--port", type=int, default=7860, help=_("Specify the server port."))
+parser.add_argument("-p", "--port", type=int, default=7860, help=_("Specify the server port for the GUI."))
 parser.add_argument('-a', '--auth', metavar=(_("<u>:<p>")), help=_("Enter the username <u> and password <p> for authorization."))
 parser.add_argument('-l', '--listen', action='store_true', help=_("Host the app on the local network."))
 parser.add_argument('-s', '--share', action='store_true', help=_("Create a public sharing tunnel."))
 parser.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS, help=_("Show this help message and exit."))
+parser.add_argument('-i', '--api', action='store_true', help=_("Enable API mode"))
+parser.add_argument('-o', '--api-port', type=int, default=5050, help=_("Specify the server port for the API."))
+parser.add_argument('-m', '--model', choices=MODELS.keys(), default="small", help=_("Select the default model (small, tiny, or base)"))
 args = parser.parse_args()
+
+# Set the default model
+default_model = MODELS[args.model]
 
 info = _("This is a simple web UI for the %s project. %s %s") % ("<b>WhisperSpeech</b>","<br>https://github.com/Mateusz-Dera/whisperspeech-webui","<br>https://github.com/collabora/WhisperSpeech")
 
@@ -102,6 +117,28 @@ def update(m,t,s,v,af):
         gr.Error(file_error)
         print(file_error)
 
+# API functionality
+app = Flask(__name__)
+
+@app.route('/generate', methods=['POST'])
+def generate_audio():
+    data = request.json
+    text = data.get('text', '')
+    speed = data.get('speed', 13.5)
+    audio_format = data.get('format', 'wav')
+
+    # Use the default model for API requests
+    output_file = update(default_model, text, speed, None, audio_format)
+
+    if output_file:
+        return send_file(output_file, as_attachment=True)
+    else:
+        return "Error generating audio", 500
+
+def run_api():
+    app.run(host='0.0.0.0', port=args.api_port)
+
+# Gradio UI setup
 with gr.Blocks(
     theme=gr.themes.Soft(
         primary_hue="orange",
@@ -114,13 +151,7 @@ with gr.Blocks(
         with gr.Column():
             gr.Markdown(info)
             
-            models = [
-                "collabora/whisperspeech:s2a-q4-small-en+pl.model", 
-                "collabora/whisperspeech:s2a-q4-tiny-en+pl.model", 
-                "collabora/whisperspeech:s2a-q4-base-en+pl.model"
-            ]
-
-            model = gr.Dropdown(choices=models, label=_("Model"), value=models[0], interactive=True)
+            model = gr.Dropdown(choices=list(MODELS.values()), label=_("Model"), value=default_model, interactive=True)
         
             text = gr.Textbox(
                 placeholder=_("Enter your text here..."),
@@ -166,21 +197,32 @@ with gr.Blocks(
         
         btn.click(fn=update, inputs=[model,text,slider,voice,audio_format], outputs=out)
 
-# Args
-host = "127.0.0.1"
+# Main execution
+if __name__ == "__main__":
+    host = "127.0.0.1"
+    if args.listen:
+        host = "0.0.0.0"
 
-if args.listen:
-    host = "0.0.0.0"
+    # Start API in a separate thread if enabled
+    if args.api:
+        api_thread = threading.Thread(target=run_api)
+        api_thread.start()
+        print(f"API running on port {args.api_port}")
 
-if args.auth != None:
-    try:
-        user, password = args.auth.split(":")
-        if user == "" or password == "" or user == None or password == None:
-            raise Exception
-    except:
-        print(_("Invalid username and/or password."))
-        sys.exit(1)
+    # Launch Gradio UI
+    if args.auth is not None:
+        try:
+            user, password = args.auth.split(":")
+            if user == "" or password == "" or user is None or password is None:
+                raise Exception
+        except:
+            print(_("Invalid username and/or password."))
+            sys.exit(1)
 
-    demo.launch(server_port=args.port, server_name=host, auth=(user,password), share=args.share)
+        demo.launch(server_port=args.port, server_name=host, auth=(user,password), share=args.share)
+    else:
+        demo.launch(server_port=args.port, server_name=host, share=args.share)
 
-demo.launch(server_port=args.port, server_name=host, share=args.share)
+    # If API is running, wait for it to finish
+    if args.api:
+        api_thread.join()

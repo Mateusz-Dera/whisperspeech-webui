@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhisperSpeech API Client</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select, button {
+            padding: 5px;
+            font-size: 16px;
+        }
+        button {
+            cursor: pointer;
+        }
+        .row {
+            display: flex;
+            gap: 10px;
+        }
+        .row input {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <h1>WhisperSpeech API Client</h1>
+    <form id="ttsForm">
+        <div class="row">
+            <div>
+                <label for="ip">IP Address:</label>
+                <input type="text" id="ip" value="localhost" required>
+            </div>
+            <div>
+                <label for="port">Port:</label>
+                <input type="number" id="port" value="5050" required>
+            </div>
+        </div>
+
+        <label for="text">Text:</label>
+        <textarea id="text" rows="4" required></textarea>
+
+        <label for="speed">Speed (characters per second):</label>
+        <input type="number" id="speed" min="10" max="15" step="0.25" value="13.5" required>
+
+        <label for="format">Audio Format:</label>
+        <select id="format" required>
+            <option value="wav">WAV</option>
+            <option value="mp3">MP3</option>
+            <option value="ogg">OGG</option>
+        </select>
+
+        <button type="submit">Generate Audio</button>
+    </form>
+
+    <audio id="audioPlayer" controls style="display: none; margin-top: 20px;"></audio>
+
+    <script>
+        const form = document.getElementById('ttsForm');
+        const audioPlayer = document.getElementById('audioPlayer');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const ip = document.getElementById('ip').value;
+            const port = document.getElementById('port').value;
+            const text = document.getElementById('text').value;
+            const speed = document.getElementById('speed').value;
+            const format = document.getElementById('format').value;
+
+            const apiUrl = `http://${ip}:${port}/generate`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text, speed: parseFloat(speed), format }),
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = URL.createObjectURL(blob);
+                    audioPlayer.src = url;
+                    audioPlayer.style.display = 'block';
+                    audioPlayer.play();
+                } else {
+                    throw new Error('Server response was not ok.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error generating audio. Please check the API address and try again.');
+            }
+        });
+    </script>
+</body>
+</html>
