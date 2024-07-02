@@ -1,7 +1,5 @@
 # WhisperSpeech web UI
-Web UI for WhisperSpeech
-
-(https://github.com/collabora/WhisperSpeech)
+Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 
 ![Preview](screenshot.png)
 
