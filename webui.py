@@ -259,7 +259,7 @@ if __name__ == "__main__":
         api_host = host
         api_port = find_available_port(args.api_port)
         if api_port != args.api_port:
-            print(f"API port {args.api_port} is busy. Using port {api_port} instead.")
+            print(f"API port {args.api_port} is busy. Using port {api_port} instead.\n")
         api_thread = threading.Thread(target=run_api, args=(api_host, api_port))
         api_thread.start()
 
