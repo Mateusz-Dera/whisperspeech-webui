@@ -26,6 +26,11 @@ import sys
 import gettext
 import re
 from datetime import datetime
+import threading
+import json
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from urllib.parse import parse_qs
+import socket
 
 import torch
 import gradio as gr
@@ -39,14 +44,39 @@ gettext.bindtextdomain('messages', localedir='locale')
 gettext.textdomain('messages')
 _ = gettext.gettext
 
+# Define available models
+MODELS = {
+    "small": "collabora/whisperspeech:s2a-q4-small-en+pl.model",
+    "tiny": "collabora/whisperspeech:s2a-q4-tiny-en+pl.model",
+    "base": "collabora/whisperspeech:s2a-q4-base-en+pl.model"
+}
+
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except Exception:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
+
 # Use user parameter for server port
 parser = argparse.ArgumentParser(add_help=False, formatter_class=RichHelpFormatter)
-parser.add_argument("-p", "--port", type=int, default=7860, help=_("Specify the server port."))
+parser.add_argument("-p", "--port", metavar=(_("<port>")), type=int, default=7860, help=_("Specify the server port for the GUI."))
 parser.add_argument('-a', '--auth', metavar=(_("<u>:<p>")), help=_("Enter the username <u> and password <p> for authorization."))
 parser.add_argument('-l', '--listen', action='store_true', help=_("Host the app on the local network."))
 parser.add_argument('-s', '--share', action='store_true', help=_("Create a public sharing tunnel."))
 parser.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS, help=_("Show this help message and exit."))
+parser.add_argument('-i', '--api', action='store_true', help=_("Enable API mode"))
+parser.add_argument('-o', '--api-port', metavar=(_("<port>")), type=int, default=5050, help=_("Specify the server port for the API."))
+parser.add_argument('-m', '--model', choices=MODELS.keys(), default="small", help=_("Select the default model"))
 args = parser.parse_args()
+
+# Set the default model
+default_model = MODELS[args.model]
 
 info = _("This is a simple web UI for the %s project. %s %s") % ("<b>WhisperSpeech</b>","<br>https://github.com/Mateusz-Dera/whisperspeech-webui","<br>https://github.com/collabora/WhisperSpeech")
 
@@ -58,7 +88,6 @@ def split_text(text):
 
 # Model, text, slider value, voice, audio format
 def update(m,t,s,v,af):
-
     if not torch.cuda.is_available():
         cuda_device = _("No CUDA device available.")
         gr.Error(cuda_device) 
@@ -102,6 +131,46 @@ def update(m,t,s,v,af):
         gr.Error(file_error)
         print(file_error)
 
+# API functionality
+class WhisperSpeechHandler(BaseHTTPRequestHandler):
+    def do_POST(self):
+        if self.path == '/generate':
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            data = json.loads(post_data.decode('utf-8'))
+
+            text = data.get('text', '')
+            speed = data.get('speed', 13.5)
+            audio_format = data.get('format', 'wav')
+
+            output_file = update(default_model, text, speed, None, audio_format)
+
+            if output_file:
+                self.send_response(200)
+                self.send_header('Content-type', f'audio/{audio_format}')
+                self.send_header('Access-Control-Allow-Origin', '*')  # Allow CORS
+                self.end_headers()
+                with open(output_file, 'rb') as file:
+                    self.wfile.write(file.read())
+            else:
+                self.send_error(500, "Error generating audio")
+        else:
+            self.send_error(404, "Not Found")
+
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.end_headers()
+
+def run_api(host, port):
+    server_address = (host, port)
+    httpd = HTTPServer(server_address, WhisperSpeechHandler)
+    print(f"API running on http://{host}:{port}")
+    httpd.serve_forever()
+
+# Gradio UI setup
 with gr.Blocks(
     theme=gr.themes.Soft(
         primary_hue="orange",
@@ -114,13 +183,7 @@ with gr.Blocks(
         with gr.Column():
             gr.Markdown(info)
             
-            models = [
-                "collabora/whisperspeech:s2a-q4-small-en+pl.model", 
-                "collabora/whisperspeech:s2a-q4-tiny-en+pl.model", 
-                "collabora/whisperspeech:s2a-q4-base-en+pl.model"
-            ]
-
-            model = gr.Dropdown(choices=models, label=_("Model"), value=models[0], interactive=True)
+            model = gr.Dropdown(choices=list(MODELS.values()), label=_("Model"), value=default_model, interactive=True)
         
             text = gr.Textbox(
                 placeholder=_("Enter your text here..."),
@@ -166,21 +229,37 @@ with gr.Blocks(
         
         btn.click(fn=update, inputs=[model,text,slider,voice,audio_format], outputs=out)
 
-# Args
-host = "127.0.0.1"
+# Main execution
+if __name__ == "__main__":
+    host = "127.0.0.1"
+    if args.listen or args.share:
+        host = "0.0.0.0"
 
-if args.listen:
-    host = "0.0.0.0"
+    # Start API in a separate thread if enabled
+    if args.api:
+        api_host = host
+        api_thread = threading.Thread(target=run_api, args=(api_host, args.api_port))
+        api_thread.start()
+        
+        if api_host == "0.0.0.0":
+            print(f"API accessible at:")
+            print(f"  - http://localhost:{args.api_port}")
+            print(f"  - http://{get_ip()}:{args.api_port}")
 
-if args.auth != None:
-    try:
-        user, password = args.auth.split(":")
-        if user == "" or password == "" or user == None or password == None:
-            raise Exception
-    except:
-        print(_("Invalid username and/or password."))
-        sys.exit(1)
+    # Launch Gradio UI
+    if args.auth is not None:
+        try:
+            user, password = args.auth.split(":")
+            if user == "" or password == "" or user is None or password is None:
+                raise Exception
+        except:
+            print(_("Invalid username and/or password."))
+            sys.exit(1)
 
-    demo.launch(server_port=args.port, server_name=host, auth=(user,password), share=args.share)
+        demo.launch(server_port=args.port, server_name=host, auth=(user,password), share=args.share)
+    else:
+        demo.launch(server_port=args.port, server_name=host, share=args.share)
 
-demo.launch(server_port=args.port, server_name=host, share=args.share)
+    # If API is running, wait for it to finish
+    if args.api:
+        api_thread.join()

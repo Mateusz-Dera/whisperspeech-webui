@@ -8,112 +8,124 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-02-18 20:03+0100\n"
+"POT-Creation-Date: 2024-07-02 22:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.10.3\n"
 
-#: webui.py:44
-msgid "Specify the server port."
+#: webui.py:68
+msgid "Specify the server port for the GUI."
 msgstr ""
 
-#: webui.py:45
+#: webui.py:69
 msgid "<u>:<p>"
 msgstr ""
 
-#: webui.py:45
+#: webui.py:69
 msgid "Enter the username <u> and password <p> for authorization."
 msgstr ""
 
-#: webui.py:46
+#: webui.py:70
 msgid "Host the app on the local network."
 msgstr ""
 
-#: webui.py:47
+#: webui.py:71
 msgid "Create a public sharing tunnel."
 msgstr ""
 
-#: webui.py:48
+#: webui.py:72
 msgid "Show this help message and exit."
 msgstr ""
 
-#: webui.py:51
+#: webui.py:73
+msgid "Enable API mode"
+msgstr ""
+
+#: webui.py:74
+msgid "Specify the server port for the API."
+msgstr ""
+
+#: webui.py:75
+msgid "Select the default model"
+msgstr ""
+
+#: webui.py:81
 #, python-format
 msgid "This is a simple web UI for the %s project. %s %s"
 msgstr ""
 
-#: webui.py:63
+#: webui.py:92
 msgid "No CUDA device available."
 msgstr ""
 
-#: webui.py:68
+#: webui.py:96
 msgid "CUDA device available."
 msgstr ""
 
-#: webui.py:99
+#: webui.py:127
 #, python-format
 msgid "Audio file generated: %s"
 msgstr ""
 
-#: webui.py:102
+#: webui.py:130
 msgid "Error:"
 msgstr ""
 
-#: webui.py:111
+#: webui.py:179
 msgid "WhisperSpeech Web UI"
 msgstr ""
 
-#: webui.py:124
+#: webui.py:186
 msgid "Model"
 msgstr ""
 
-#: webui.py:127
+#: webui.py:189
 msgid "Enter your text here..."
 msgstr ""
 
-#: webui.py:128
+#: webui.py:190
 msgid "Text"
 msgstr ""
 
-#: webui.py:132
+#: webui.py:194
 msgid ""
 "You can use the *&lt;en&gt;* and *&lt;pl&gt;* tags to change languages "
 "and even combine them."
 msgstr ""
 
-#: webui.py:133
+#: webui.py:195
 msgid "Combining languages can produce mixed results."
 msgstr ""
 
-#: webui.py:134
+#: webui.py:196
 msgid "Example:"
 msgstr ""
 
-#: webui.py:138
+#: webui.py:200
 msgid "Characters per second"
 msgstr ""
 
-#: webui.py:147
+#: webui.py:209
 msgid "Voice to clone (optional)"
 msgstr ""
 
-#: webui.py:159
+#: webui.py:221
 msgid "Audio format"
 msgstr ""
 
-#: webui.py:161
+#: webui.py:223
 msgid "Generate"
 msgstr ""
 
-#: webui.py:164
+#: webui.py:226
 msgid "Output"
 msgstr ""
 
-#: webui.py:182
+#: webui.py:256
 msgid "Invalid username and/or password."
 msgstr ""
 
