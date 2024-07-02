@@ -240,11 +240,6 @@ if __name__ == "__main__":
         api_host = host
         api_thread = threading.Thread(target=run_api, args=(api_host, args.api_port))
         api_thread.start()
-        
-        if api_host == "0.0.0.0":
-            print(f"API accessible at:")
-            print(f"  - http://localhost:{args.api_port}")
-            print(f"  - http://{get_ip()}:{args.api_port}")
 
     # Launch Gradio UI
     if args.auth is not None:
