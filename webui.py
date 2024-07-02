@@ -229,16 +229,38 @@ with gr.Blocks(
         
         btn.click(fn=update, inputs=[model,text,slider,voice,audio_format], outputs=out)
 
+def is_port_available(port):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        try:
+            s.bind(('', port))
+            return True
+        except OSError:
+            return False
+
+def find_available_port(start_port):
+    port = start_port
+    while not is_port_available(port):
+        port += 1
+    return port
+
 # Main execution
 if __name__ == "__main__":
     host = "127.0.0.1"
     if args.listen or args.share:
         host = "0.0.0.0"
 
+    # Find an available port starting from the specified port
+    port = find_available_port(args.port)
+    if port != args.port:
+        print(f"Port {args.port} is busy. Using port {port} instead.")
+
     # Start API in a separate thread if enabled
     if args.api:
         api_host = host
-        api_thread = threading.Thread(target=run_api, args=(api_host, args.api_port))
+        api_port = find_available_port(args.api_port)
+        if api_port != args.api_port:
+            print(f"API port {args.api_port} is busy. Using port {api_port} instead.")
+        api_thread = threading.Thread(target=run_api, args=(api_host, api_port))
         api_thread.start()
 
     # Launch Gradio UI
@@ -251,9 +273,9 @@ if __name__ == "__main__":
             print(_("Invalid username and/or password."))
             sys.exit(1)
 
-        demo.launch(server_port=args.port, server_name=host, auth=(user,password), share=args.share)
+        demo.launch(server_port=port, server_name=host, auth=(user,password), share=args.share)
     else:
-        demo.launch(server_port=args.port, server_name=host, share=args.share)
+        demo.launch(server_port=port, server_name=host, share=args.share)
 
     # If API is running, wait for it to finish
     if args.api:
