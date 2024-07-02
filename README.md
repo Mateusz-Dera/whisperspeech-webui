@@ -54,10 +54,9 @@ sudo apt install ffmpeg
 pip install -r requrements.txt
 ```
 
-#TODO
 * ROCm 6.0:
 ```bash
-pip install -r requirements_rocm_6.0.txt
+pip install -r requirements_rocm.txt
 pip install git+https://github.com/ROCmSoftwarePlatform/flash-attention.git@2554f490101742ccdc56620a938f847f61754be6
 ```
 
