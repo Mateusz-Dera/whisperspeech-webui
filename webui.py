@@ -73,6 +73,7 @@ parser.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS, he
 parser.add_argument('-i', '--api', action='store_true', help=_("Enable API mode"))
 parser.add_argument('-o', '--api-port', metavar=(_("<port>")), type=int, default=5050, help=_("Specify the server port for the API."))
 parser.add_argument('-m', '--model', choices=MODELS.keys(), default="small", help=_("Select the default model"))
+parser.add_argument('-v', '--api-voice', metavar=(_("<path>")), help=_("Specify the path to an mp3, wav, or ogg file for voice cloning when using the API."))
 args = parser.parse_args()
 
 # Set the default model
@@ -143,7 +144,10 @@ class WhisperSpeechHandler(BaseHTTPRequestHandler):
             speed = data.get('speed', 13.5)
             audio_format = data.get('format', 'wav')
 
-            output_file = update(default_model, text, speed, None, audio_format)
+            # Use the API voice if specified
+            voice = args.api_voice if args.api_voice else None
+
+            output_file = update(default_model, text, speed, voice, audio_format)
 
             if output_file:
                 self.send_response(200)
@@ -243,6 +247,10 @@ def find_available_port(start_port):
         port += 1
     return port
 
+def check_extension(filename):
+    allowed_extensions = ('.mp3', '.ogg', '.wav')
+    return filename.lower().endswith(allowed_extensions)
+
 # Main execution
 if __name__ == "__main__":
     host = "127.0.0.1"
@@ -256,6 +264,14 @@ if __name__ == "__main__":
 
     # Start API in a separate thread if enabled
     if args.api:
+        if not os.path.exists(args.api_voice):
+            print("The specified voice file does not exist.")
+            sys.exit(1)
+        
+        if not check_extension(args.api_voice):
+            print("The specified voice file must be in mp3, wav, or ogg format.")
+            sys.exit(1)
+
         api_host = host
         api_port = find_available_port(args.api_port)
         if api_port != args.api_port:
