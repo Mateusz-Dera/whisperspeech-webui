@@ -63,7 +63,7 @@ def get_ip():
         s.close()
     return IP
 
-# Use user parameter for server port
+# Argument parser
 parser = argparse.ArgumentParser(add_help=False, formatter_class=RichHelpFormatter)
 parser.add_argument("-p", "--port", metavar=(_("<port>")), type=int, default=7860, help=_("Specify the server port for the GUI."))
 parser.add_argument('-a', '--auth', metavar=(_("<u>:<p>")), help=_("Enter the username <u> and password <p> for authorization."))
