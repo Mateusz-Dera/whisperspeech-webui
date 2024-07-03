@@ -80,7 +80,9 @@ python webui.py
 ```bash
 python webui.py -h
 ```
-
+## GUI Translations:
+* English
+* Polish
 <!-- TRANSLATION -->
 <!-- PYBABEL -->
 <!-- EXTRACT -->
