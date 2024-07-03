@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-07-02 22:57+0200\n"
+"POT-Creation-Date: 2024-07-03 21:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
+
+#: webui.py:68 webui.py:74
+msgid "<port>"
+msgstr ""
 
 #: webui.py:68
 msgid "Specify the server port for the GUI."
@@ -53,79 +57,89 @@ msgstr ""
 msgid "Select the default model"
 msgstr ""
 
-#: webui.py:81
+#: webui.py:76
+msgid "<path>"
+msgstr ""
+
+#: webui.py:76
+msgid ""
+"Specify the path to an mp3, wav, or ogg file for voice cloning when using"
+" the API."
+msgstr ""
+
+#: webui.py:82
 #, python-format
 msgid "This is a simple web UI for the %s project. %s %s"
 msgstr ""
 
-#: webui.py:92
+#: webui.py:93
 msgid "No CUDA device available."
 msgstr ""
 
-#: webui.py:96
+#: webui.py:97
 msgid "CUDA device available."
 msgstr ""
 
-#: webui.py:127
+#: webui.py:128
 #, python-format
 msgid "Audio file generated: %s"
 msgstr ""
 
-#: webui.py:130
+#: webui.py:131
 msgid "Error:"
 msgstr ""
 
-#: webui.py:179
+#: webui.py:184
 msgid "WhisperSpeech Web UI"
 msgstr ""
 
-#: webui.py:186
+#: webui.py:191
 msgid "Model"
 msgstr ""
 
-#: webui.py:189
+#: webui.py:194
 msgid "Enter your text here..."
 msgstr ""
 
-#: webui.py:190
+#: webui.py:195
 msgid "Text"
 msgstr ""
 
-#: webui.py:194
+#: webui.py:199
 msgid ""
 "You can use the *&lt;en&gt;* and *&lt;pl&gt;* tags to change languages "
 "and even combine them."
 msgstr ""
 
-#: webui.py:195
+#: webui.py:200
 msgid "Combining languages can produce mixed results."
 msgstr ""
 
-#: webui.py:196
+#: webui.py:201
 msgid "Example:"
 msgstr ""
 
-#: webui.py:200
+#: webui.py:205
 msgid "Characters per second"
 msgstr ""
 
-#: webui.py:209
+#: webui.py:214
 msgid "Voice to clone (optional)"
 msgstr ""
 
-#: webui.py:221
+#: webui.py:226
 msgid "Audio format"
 msgstr ""
 
-#: webui.py:223
+#: webui.py:228
 msgid "Generate"
 msgstr ""
 
-#: webui.py:226
+#: webui.py:231
 msgid "Output"
 msgstr ""
 
-#: webui.py:256
+#: webui.py:291
 msgid "Invalid username and/or password."
 msgstr ""
 

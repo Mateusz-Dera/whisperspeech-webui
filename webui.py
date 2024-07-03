@@ -172,6 +172,7 @@ def run_api(host, port):
     server_address = (host, port)
     httpd = HTTPServer(server_address, WhisperSpeechHandler)
     print(f"API running on http://{host}:{port}")
+ 
     httpd.serve_forever()
 
 # Gradio UI setup
@@ -264,18 +265,27 @@ if __name__ == "__main__":
 
     # Start API in a separate thread if enabled
     if args.api:
-        if not os.path.exists(args.api_voice):
-            print("The specified voice file does not exist.")
-            sys.exit(1)
-        
-        if not check_extension(args.api_voice):
-            print("The specified voice file must be in mp3, wav, or ogg format.")
-            sys.exit(1)
+        if args.api_voice:
+            if not os.path.exists(args.api_voice):
+                print("The specified voice file does not exist.")
+                sys.exit(1)
+            
+            if not check_extension(args.api_voice):
+                print("The specified voice file must be in mp3, wav, or ogg format.")
+                sys.exit(1)
 
         api_host = host
         api_port = find_available_port(args.api_port)
+        
         if api_port != args.api_port:
-            print(f"API port {args.api_port} is busy. Using port {api_port} instead.\n")
+            print(f"API port {args.api_port} is busy. Using port {api_port} instead.")
+
+        if api_port == port:
+            print(f"API port {api_port} is the same as the GUI port. Using port {api_port + 1} instead.")
+            api_port = find_available_port(api_port + 1)
+
+        print("\n")
+
         api_thread = threading.Thread(target=run_api, args=(api_host, api_port))
         api_thread.start()
 

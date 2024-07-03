@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-07-02 22:57+0200\n"
+"POT-Creation-Date: 2024-07-03 21:54+0200\n"
 "PO-Revision-Date: 2024-02-18 12:55+0100\n"
 "Last-Translator: Mateusz Dera\n"
 "Language: pl_PL\n"
@@ -18,6 +18,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
+
+#: webui.py:68 webui.py:74
+msgid "<port>"
+msgstr ""
 
 #: webui.py:68
 msgid "Specify the server port for the GUI."
@@ -56,45 +60,55 @@ msgstr "Port serwera."
 msgid "Select the default model"
 msgstr "Wybierz domyślny model"
 
-#: webui.py:81
+#: webui.py:76
+msgid "<path>"
+msgstr "<ścieżka>"
+
+#: webui.py:76
+msgid ""
+"Specify the path to an mp3, wav, or ogg file for voice cloning when using"
+" the API."
+msgstr "Ścieżka do pliku mp3, wav lub ogg do sklonowania przy użyciu API"
+
+#: webui.py:82
 #, python-format
 msgid "This is a simple web UI for the %s project. %s %s"
 msgstr "Prosty interfejs dla %s. %s %s"
 
-#: webui.py:92
+#: webui.py:93
 msgid "No CUDA device available."
 msgstr "Brak dostępnego urządzenia wspierającego CUDA."
 
-#: webui.py:96
+#: webui.py:97
 msgid "CUDA device available."
 msgstr "Urządzenie wspierające CUDA jest dostępne."
 
-#: webui.py:127
+#: webui.py:128
 #, python-format
 msgid "Audio file generated: %s"
 msgstr "Wygenerowany plik audio: %s"
 
-#: webui.py:130
+#: webui.py:131
 msgid "Error:"
 msgstr "Błąd:"
 
-#: webui.py:179
+#: webui.py:184
 msgid "WhisperSpeech Web UI"
 msgstr "WhisperSpeech Web UI"
 
-#: webui.py:186
+#: webui.py:191
 msgid "Model"
 msgstr "Model"
 
-#: webui.py:189
+#: webui.py:194
 msgid "Enter your text here..."
 msgstr "Wpisz swój tekst tutaj..."
 
-#: webui.py:190
+#: webui.py:195
 msgid "Text"
 msgstr "Tekst"
 
-#: webui.py:194
+#: webui.py:199
 msgid ""
 "You can use the *&lt;en&gt;* and *&lt;pl&gt;* tags to change languages "
 "and even combine them."
@@ -102,35 +116,35 @@ msgstr ""
 "Możesz używać znaczników *&lt;en&gt;* oraz *&lt;pl&gt;* do przełączania "
 "się między językami lub łączenia ich."
 
-#: webui.py:195
+#: webui.py:200
 msgid "Combining languages can produce mixed results."
 msgstr "Łączenie języków może powodować mieszane rezultaty."
 
-#: webui.py:196
+#: webui.py:201
 msgid "Example:"
 msgstr "Przykład:"
 
-#: webui.py:200
+#: webui.py:205
 msgid "Characters per second"
 msgstr "Znaki na sekundę"
 
-#: webui.py:209
+#: webui.py:214
 msgid "Voice to clone (optional)"
 msgstr "Głos do sklonowania (opcjonalny)"
 
-#: webui.py:221
+#: webui.py:226
 msgid "Audio format"
 msgstr "Format pliku audio"
 
-#: webui.py:223
+#: webui.py:228
 msgid "Generate"
 msgstr "Generuj"
 
-#: webui.py:226
+#: webui.py:231
 msgid "Output"
 msgstr "Efek końcowy"
 
-#: webui.py:256
+#: webui.py:291
 msgid "Invalid username and/or password."
 msgstr "Błędny użytkownik i/lub hasło."
 
