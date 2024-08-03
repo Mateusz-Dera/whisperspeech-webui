@@ -4,10 +4,10 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 ![Preview](screenshot.png)
 
 ## Info
-[![Version](https://img.shields.io/badge/2.0-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
+[![Version](https://img.shields.io/badge/2.1-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
 
 > [!Note]
-> Version 2.0 now allows voice generation via API.
+> Version 2.x now allows voice generation via API.
 
 ### Test platforms:
 |Name|Info|
@@ -17,7 +17,7 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 |RAM|64GB DDR5 6600MHz|
 |Motherboard|ASRock B650E PG Riptide WiFi (BIOS 2.10)|
 |OS|Ubuntu 24.04|
-|Kernel|6.8.0-36-generic|
+|Kernel|6.8.0-39-generic|
 |ROCm|6.1.3|
 
 |Name|Info|
@@ -56,9 +56,21 @@ sudo apt install ffmpeg
 pip install -r requrements.txt
 ```
 
+* ROCm 5.7:
+```bash
+pip install -r requirements_rocm_5.7.txt
+pip install git+https://github.com/ROCmSoftwarePlatform/flash-attention.git@2554f490101742ccdc56620a938f847f61754be6
+```
+
 * ROCm 6.0:
 ```bash
-pip install -r requirements_rocm.txt
+pip install -r requirements_rocm_6.0.txt
+pip install git+https://github.com/ROCmSoftwarePlatform/flash-attention.git@2554f490101742ccdc56620a938f847f61754be6
+```
+
+* ROCm 6.1:
+```bash
+pip install -r requirements_rocm_6.1.txt
 pip install git+https://github.com/ROCmSoftwarePlatform/flash-attention.git@2554f490101742ccdc56620a938f847f61754be6
 ```
 
