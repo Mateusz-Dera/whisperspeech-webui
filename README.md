@@ -4,7 +4,7 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 ![Preview](screenshot.png)
 
 ## Info
-[![Version](https://img.shields.io/badge/2.1-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
+[![Version](https://img.shields.io/badge/2.2-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
 
 > [!Note]
 > Version 2.x now allows voice generation via API.
@@ -18,7 +18,7 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 |Motherboard|ASRock B650E PG Riptide WiFi (BIOS 2.10)|
 |OS|Ubuntu 24.04|
 |Kernel|6.8.0-39-generic|
-|ROCm|6.1.3|
+|ROCm|6.2.1|
 
 |Name|Info|
 |:---|:---|
@@ -26,9 +26,9 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 |GPU|NVIDIA GeForce RTX 4050|
 |RAM|16GB DDR4 3200MHz|
 |Motherboard|GIGABYTE G5 MF (BIOS FB10)|
-|OS|Ubuntu 24.04|
-|Kernel|6.8.0-36-generic|
-|NVIDIA Driver|535.183.01|
+|OS|Solus 4.5 Resilience|
+|Kernel|6.10.13-304.current|
+|NVIDIA Driver|560.35.03|
 
 ## Instalation:
 1. Install Python 3.12
@@ -44,7 +44,7 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 ```bash
 export HSA_OVERRIDE_GFX_VERSION=11.0.0
 ```
-5. Install ffmpeg:
+5. Install ffmpeg (Ubuntu 24.04):
 ```bash
 sudo apt install ffmpeg
 ```
@@ -97,6 +97,7 @@ python webui.py -h
 * Polish
 <!-- TRANSLATION -->
 <!-- PYBABEL -->
+<!-- pip install pybabel==2.16.0 -->
 <!-- EXTRACT -->
 <!-- pybabel extract -F babel.cfg -o ./locale/messages.pot . -->
 <!-- UPDATE -->

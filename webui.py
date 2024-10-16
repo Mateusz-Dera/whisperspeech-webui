@@ -39,6 +39,15 @@ from pydub import AudioSegment
 from rich_argparse import RichHelpFormatter
 from whisperspeech.pipeline import Pipeline
 
+# Version
+version = "2.2"
+
+# CSS
+css = """
+a {color: orange;}
+::selection {color: white; background: orange;}
+"""
+
 # Define translation domain and bind it to the 'locales' directory
 gettext.bindtextdomain('messages', localedir='locale')
 gettext.textdomain('messages')
@@ -79,7 +88,11 @@ args = parser.parse_args()
 # Set the default model
 default_model = MODELS[args.model]
 
-info = _("This is a simple web UI for the %s project. %s %s") % ("<b>WhisperSpeech</b>","<br>https://github.com/Mateusz-Dera/whisperspeech-webui","<br>https://github.com/collabora/WhisperSpeech")
+info = _("This is a simple web UI for the %s project. %s %s") % (
+    "<b>WhisperSpeech</b>",
+    '<br><a href="https://github.com/Mateusz-Dera/whisperspeech-webui">https://github.com/Mateusz-Dera/whisperspeech-webui</a>',
+    '<br><a href="https://github.com/collabora/WhisperSpeech">https://github.com/collabora/WhisperSpeech</a>'
+)
 
 def split_text(text):
     sentences_with_tags = re.findall(r'(<en>|<pl>)?\s*([^<]*)', text)
@@ -94,7 +107,7 @@ def update(m,t,s,v,af):
         gr.Error(cuda_device) 
         print(cuda_device)
     else:
-        print(_("CUDA device available."))
+        print(_("ROCm/CUDA device available."))
 
     print("\n",m,"\n",t,"\n",s,"\n",v,"\n",af)
     pipe = Pipeline(s2a_ref=m)
@@ -157,9 +170,9 @@ class WhisperSpeechHandler(BaseHTTPRequestHandler):
                 with open(output_file, 'rb') as file:
                     self.wfile.write(file.read())
             else:
-                self.send_error(500, "Error generating audio")
+                self.send_error(500, _("Error generating audio"))
         else:
-            self.send_error(404, "Not Found")
+            self.send_error(404, _("Not Found"))
 
     def do_OPTIONS(self):
         self.send_response(200)
@@ -171,17 +184,14 @@ class WhisperSpeechHandler(BaseHTTPRequestHandler):
 def run_api(host, port):
     server_address = (host, port)
     httpd = HTTPServer(server_address, WhisperSpeechHandler)
-    print(f"API running on http://{host}:{port}")
+    print(_("API running on http://%s:%s") % (host,port))
  
     httpd.serve_forever()
 
 # Gradio UI setup
 with gr.Blocks(
-    theme=gr.themes.Soft(
-        primary_hue="orange",
-        secondary_hue="amber",
-    ),
-    title=(_("WhisperSpeech Web UI"))
+    title=(_("WhisperSpeech Web UI")),
+    css=css
     ) as demo:
     
     with gr.Row():
@@ -254,6 +264,7 @@ def check_extension(filename):
 
 # Main execution
 if __name__ == "__main__":
+    print(_("Version: %s") % version)
     host = "127.0.0.1"
     if args.listen or args.share:
         host = "0.0.0.0"
@@ -261,27 +272,27 @@ if __name__ == "__main__":
     # Find an available port starting from the specified port
     port = find_available_port(args.port)
     if port != args.port:
-        print(f"Port {args.port} is busy. Using port {port} instead.")
+        print(_("Port {args.port} is busy. Using port {port} instead.") % (args.port,port))
 
     # Start API in a separate thread if enabled
     if args.api:
         if args.api_voice:
             if not os.path.exists(args.api_voice):
-                print("The specified voice file does not exist.")
+                print(_("The specified voice file does not exist."))
                 sys.exit(1)
             
             if not check_extension(args.api_voice):
-                print("The specified voice file must be in mp3, wav, or ogg format.")
+                print(_("The specified voice file must be in mp3, wav, or ogg format."))
                 sys.exit(1)
 
         api_host = host
         api_port = find_available_port(args.api_port)
         
         if api_port != args.api_port:
-            print(f"API port {args.api_port} is busy. Using port {api_port} instead.")
+            print(_("API port %s is busy. Using port %s instead.") % (args.api_port,api_port))
 
         if api_port == port:
-            print(f"API port {api_port} is the same as the GUI port. Using port {api_port + 1} instead.")
+            print(_("API port %s is the same as the GUI port. Using port %s instead.") % (api_port,api_port + 1))
             api_port = find_available_port(api_port + 1)
 
         print("\n")
