@@ -46,6 +46,7 @@ version = "2.2"
 css = """
 a {color: orange;}
 ::selection {color: white; background: orange;}
+p {text-align: center;}
 """
 
 # Define translation domain and bind it to the 'locales' directory
@@ -55,8 +56,8 @@ _ = gettext.gettext
 
 # Define available models
 MODELS = {
-    "small": "collabora/whisperspeech:s2a-q4-small-en+pl.model",
     "tiny": "collabora/whisperspeech:s2a-q4-tiny-en+pl.model",
+    "small": "collabora/whisperspeech:s2a-q4-small-en+pl.model",
     "base": "collabora/whisperspeech:s2a-q4-base-en+pl.model"
 }
 
@@ -72,26 +73,35 @@ def get_ip():
         s.close()
     return IP
 
+# Create a custom formatter class
+class CustomHelpFormatter(RichHelpFormatter):
+    def __init__(self, prog):
+        super().__init__(prog, max_help_position=35, width=100)
+
 # Argument parser
-parser = argparse.ArgumentParser(add_help=False, formatter_class=RichHelpFormatter)
+parser = argparse.ArgumentParser(add_help=False,  formatter_class=CustomHelpFormatter)
 parser.add_argument("-p", "--port", metavar=(_("<port>")), type=int, default=7860, help=_("Specify the server port for the GUI."))
 parser.add_argument('-a', '--auth', metavar=(_("<u>:<p>")), help=_("Enter the username <u> and password <p> for authorization."))
 parser.add_argument('-l', '--listen', action='store_true', help=_("Host the app on the local network."))
 parser.add_argument('-s', '--share', action='store_true', help=_("Create a public sharing tunnel."))
 parser.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS, help=_("Show this help message and exit."))
-parser.add_argument('-i', '--api', action='store_true', help=_("Enable API mode"))
+parser.add_argument('-i', '--api', action='store_true', help=_("Enable API mode."))
 parser.add_argument('-o', '--api-port', metavar=(_("<port>")), type=int, default=5050, help=_("Specify the server port for the API."))
-parser.add_argument('-m', '--model', choices=MODELS.keys(), default="small", help=_("Select the default model"))
+parser.add_argument('-m', '--model', choices=MODELS.keys(), default="tiny", help=_("Select the default model tiny/small/base."))
 parser.add_argument('-v', '--api-voice', metavar=(_("<path>")), help=_("Specify the path to an mp3, wav, or ogg file for voice cloning when using the API."))
 args = parser.parse_args()
 
 # Set the default model
 default_model = MODELS[args.model]
 
-info = _("This is a simple web UI for the %s project. %s %s") % (
-    "<b>WhisperSpeech</b>",
-    '<br><a href="https://github.com/Mateusz-Dera/whisperspeech-webui">https://github.com/Mateusz-Dera/whisperspeech-webui</a>',
-    '<br><a href="https://github.com/collabora/WhisperSpeech">https://github.com/collabora/WhisperSpeech</a>'
+text_info = _("This is a simple web UI for the %s project.") % "<b>WhisperSpeech</b>"
+text_version = "<b>" + _("Version:") + "</b> " + version
+
+title = '<p>%s</p>' % text_info
+info = '<br>%s<br><a>%s</a><br><a>%s</a>' % (
+    text_version,
+    'href="https://github.com/Mateusz-Dera/whisperspeech-webui">https://github.com/Mateusz-Dera/whisperspeech-webui',
+    'https://github.com/collabora/WhisperSpeech">https://github.com/collabora/WhisperSpeech'
 )
 
 def split_text(text):
@@ -103,7 +113,7 @@ def split_text(text):
 # Model, text, slider value, voice, audio format
 def update(m,t,s,v,af):
     if not torch.cuda.is_available():
-        cuda_device = _("No CUDA device available.")
+        cuda_device = _("No ROCm/CUDA device available.")
         gr.Error(cuda_device) 
         print(cuda_device)
     else:
@@ -170,9 +180,9 @@ class WhisperSpeechHandler(BaseHTTPRequestHandler):
                 with open(output_file, 'rb') as file:
                     self.wfile.write(file.read())
             else:
-                self.send_error(500, _("Error generating audio"))
+                self.send_error(500, _("Error generating audio."))
         else:
-            self.send_error(404, _("Not Found"))
+            self.send_error(404, _("Not found."))
 
     def do_OPTIONS(self):
         self.send_response(200)
@@ -193,7 +203,9 @@ with gr.Blocks(
     title=(_("WhisperSpeech Web UI")),
     css=css
     ) as demo:
-    
+
+    gr.Markdown(title)
+
     with gr.Row():
         with gr.Column():
             gr.Markdown(info)
@@ -264,7 +276,7 @@ def check_extension(filename):
 
 # Main execution
 if __name__ == "__main__":
-    print(_("Version: %s") % version)
+    print(_("Version:") + " " + version)
     host = "127.0.0.1"
     if args.listen or args.share:
         host = "0.0.0.0"
@@ -272,7 +284,7 @@ if __name__ == "__main__":
     # Find an available port starting from the specified port
     port = find_available_port(args.port)
     if port != args.port:
-        print(_("Port {args.port} is busy. Using port {port} instead.") % (args.port,port))
+        print(_("Port %s is busy. Using port %s instead.") % (args.port,port))
 
     # Start API in a separate thread if enabled
     if args.api:

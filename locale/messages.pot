@@ -8,138 +8,179 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-07-03 21:54+0200\n"
+"POT-Creation-Date: 2024-10-23 15:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.16.0\n"
 
-#: webui.py:68 webui.py:74
+#: webui.py:82 webui.py:88
 msgid "<port>"
 msgstr ""
 
-#: webui.py:68
+#: webui.py:82
 msgid "Specify the server port for the GUI."
 msgstr ""
 
-#: webui.py:69
+#: webui.py:83
 msgid "<u>:<p>"
 msgstr ""
 
-#: webui.py:69
+#: webui.py:83
 msgid "Enter the username <u> and password <p> for authorization."
 msgstr ""
 
-#: webui.py:70
+#: webui.py:84
 msgid "Host the app on the local network."
 msgstr ""
 
-#: webui.py:71
+#: webui.py:85
 msgid "Create a public sharing tunnel."
 msgstr ""
 
-#: webui.py:72
+#: webui.py:86
 msgid "Show this help message and exit."
 msgstr ""
 
-#: webui.py:73
-msgid "Enable API mode"
+#: webui.py:87
+msgid "Enable API mode."
 msgstr ""
 
-#: webui.py:74
+#: webui.py:88
 msgid "Specify the server port for the API."
 msgstr ""
 
-#: webui.py:75
-msgid "Select the default model"
+#: webui.py:89
+msgid "Select the default model tiny/small/base."
 msgstr ""
 
-#: webui.py:76
+#: webui.py:90
 msgid "<path>"
 msgstr ""
 
-#: webui.py:76
+#: webui.py:90
 msgid ""
 "Specify the path to an mp3, wav, or ogg file for voice cloning when using"
 " the API."
 msgstr ""
 
-#: webui.py:82
+#: webui.py:96
 #, python-format
-msgid "This is a simple web UI for the %s project. %s %s"
+msgid "This is a simple web UI for the %s project. %s %s %s"
 msgstr ""
 
-#: webui.py:93
-msgid "No CUDA device available."
+#: webui.py:98 webui.py:273
+#, python-format
+msgid "Version: %s"
 msgstr ""
 
-#: webui.py:97
-msgid "CUDA device available."
+#: webui.py:112
+msgid "No ROCm/CUDA device available."
 msgstr ""
 
-#: webui.py:128
+#: webui.py:116
+msgid "ROCm/CUDA device available."
+msgstr ""
+
+#: webui.py:147
 #, python-format
 msgid "Audio file generated: %s"
 msgstr ""
 
-#: webui.py:131
+#: webui.py:150
 msgid "Error:"
 msgstr ""
 
-#: webui.py:184
-msgid "WhisperSpeech Web UI"
+#: webui.py:179
+msgid "Error generating audio."
 msgstr ""
 
-#: webui.py:191
-msgid "Model"
+#: webui.py:181
+msgid "Not found."
 msgstr ""
 
-#: webui.py:194
-msgid "Enter your text here..."
-msgstr ""
-
-#: webui.py:195
-msgid "Text"
+#: webui.py:193
+#, python-format
+msgid "API running on http://%s:%s"
 msgstr ""
 
 #: webui.py:199
+msgid "WhisperSpeech Web UI"
+msgstr ""
+
+#: webui.py:207
+msgid "Model"
+msgstr ""
+
+#: webui.py:210
+msgid "Enter your text here..."
+msgstr ""
+
+#: webui.py:211
+msgid "Text"
+msgstr ""
+
+#: webui.py:215
 msgid ""
 "You can use the *&lt;en&gt;* and *&lt;pl&gt;* tags to change languages "
 "and even combine them."
 msgstr ""
 
-#: webui.py:200
+#: webui.py:216
 msgid "Combining languages can produce mixed results."
 msgstr ""
 
-#: webui.py:201
+#: webui.py:217
 msgid "Example:"
 msgstr ""
 
-#: webui.py:205
+#: webui.py:221
 msgid "Characters per second"
 msgstr ""
 
-#: webui.py:214
+#: webui.py:230
 msgid "Voice to clone (optional)"
 msgstr ""
 
-#: webui.py:226
+#: webui.py:242
 msgid "Audio format"
 msgstr ""
 
-#: webui.py:228
+#: webui.py:244
 msgid "Generate"
 msgstr ""
 
-#: webui.py:231
+#: webui.py:247
 msgid "Output"
 msgstr ""
 
+#: webui.py:281
+#, python-format
+msgid "Port %s is busy. Using port %s instead."
+msgstr ""
+
+#: webui.py:287
+msgid "The specified voice file does not exist."
+msgstr ""
+
 #: webui.py:291
+msgid "The specified voice file must be in mp3, wav, or ogg format."
+msgstr ""
+
+#: webui.py:298
+#, python-format
+msgid "API port %s is busy. Using port %s instead."
+msgstr ""
+
+#: webui.py:301
+#, python-format
+msgid "API port %s is the same as the GUI port. Using port %s instead."
+msgstr ""
+
+#: webui.py:316
 msgid "Invalid username and/or password."
 msgstr ""
 
