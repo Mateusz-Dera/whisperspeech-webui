@@ -40,14 +40,14 @@ from rich_argparse import RichHelpFormatter
 from whisperspeech.pipeline import Pipeline
 
 # Version
-version = "2.2"
+version = '2.2'
 
 # CSS
-css = """
+css = '''
 a {color: orange;}
 ::selection {color: white; background: orange;}
-p {text-align: center;}
-"""
+.center {text-align: center;}
+'''
 
 # Define translation domain and bind it to the 'locales' directory
 gettext.bindtextdomain('messages', localedir='locale')
@@ -56,9 +56,9 @@ _ = gettext.gettext
 
 # Define available models
 MODELS = {
-    "tiny": "collabora/whisperspeech:s2a-q4-tiny-en+pl.model",
-    "small": "collabora/whisperspeech:s2a-q4-small-en+pl.model",
-    "base": "collabora/whisperspeech:s2a-q4-base-en+pl.model"
+    'tiny': 'collabora/whisperspeech:s2a-q4-tiny-en+pl.model',
+    'small': 'collabora/whisperspeech:s2a-q4-small-en+pl.model',
+    'base': 'collabora/whisperspeech:s2a-q4-base-en+pl.model'
 }
 
 def get_ip():
@@ -80,24 +80,24 @@ class CustomHelpFormatter(RichHelpFormatter):
 
 # Argument parser
 parser = argparse.ArgumentParser(add_help=False,  formatter_class=CustomHelpFormatter)
-parser.add_argument("-p", "--port", metavar=(_("<port>")), type=int, default=7860, help=_("Specify the server port for the GUI."))
-parser.add_argument('-a', '--auth', metavar=(_("<u>:<p>")), help=_("Enter the username <u> and password <p> for authorization."))
-parser.add_argument('-l', '--listen', action='store_true', help=_("Host the app on the local network."))
-parser.add_argument('-s', '--share', action='store_true', help=_("Create a public sharing tunnel."))
-parser.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS, help=_("Show this help message and exit."))
-parser.add_argument('-i', '--api', action='store_true', help=_("Enable API mode."))
-parser.add_argument('-o', '--api-port', metavar=(_("<port>")), type=int, default=5050, help=_("Specify the server port for the API."))
-parser.add_argument('-m', '--model', choices=MODELS.keys(), default="tiny", help=_("Select the default model tiny/small/base."))
-parser.add_argument('-v', '--api-voice', metavar=(_("<path>")), help=_("Specify the path to an mp3, wav, or ogg file for voice cloning when using the API."))
+parser.add_argument('-p', '--port', metavar=(_('<port>')), type=int, default=7860, help=_('Specify the server port for the GUI.'))
+parser.add_argument('-a', '--auth', metavar=(_('<u>:<p>')), help=_('Enter the username <u> and password <p> for authorization.'))
+parser.add_argument('-l', '--listen', action='store_true', help=_('Host the app on the local network.'))
+parser.add_argument('-s', '--share', action='store_true', help=_('Create a public sharing tunnel.'))
+parser.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS, help=_('Show this help message and exit.'))
+parser.add_argument('-i', '--api', action='store_true', help=_('Enable API mode.'))
+parser.add_argument('-o', '--api-port', metavar=(_('<port>')), type=int, default=5050, help=_('Specify the server port for the API.'))
+parser.add_argument('-m', '--model', choices=MODELS.keys(), default="tiny", help=_('Select the default model tiny/small/base.'))
+parser.add_argument('-v', '--api-voice', metavar=(_('<path>')), help=_('Specify the path to an mp3, wav, or ogg file for voice cloning when using the API.'))
 args = parser.parse_args()
 
 # Set the default model
 default_model = MODELS[args.model]
 
-text_info = _("This is a simple web UI for the %s project.") % "<b>WhisperSpeech</b>"
-text_version = "<b>" + _("Version:") + "</b> " + version
+text_info = _('This is a simple web UI for the %s project.') % '<b>WhisperSpeech</b>'
+text_version = '<b>' + _('Version:') + '</b> ' + version
 
-title = '<p>%s</p>' % text_info
+title = '<p class="center">%s</p>' % text_info
 info = '<br>%s<br><a>%s</a><br><a>%s</a>' % (
     text_version,
     'href="https://github.com/Mateusz-Dera/whisperspeech-webui">https://github.com/Mateusz-Dera/whisperspeech-webui',
@@ -106,20 +106,20 @@ info = '<br>%s<br><a>%s</a><br><a>%s</a>' % (
 
 def split_text(text):
     sentences_with_tags = re.findall(r'(<en>|<pl>)?\s*([^<]*)', text)
-    sentences = [(tag.strip("<>") if tag else "en", sentence.strip()) for tag, sentence in sentences_with_tags if sentence.strip()]
+    sentences = [(tag.strip('<>') if tag else 'en', sentence.strip()) for tag, sentence in sentences_with_tags if sentence.strip()]
 
-    return ["  " + element[1] + "  "  for element in sentences],[element[0] for element in sentences]
+    return ['  ' + element[1] + '  '  for element in sentences],[element[0] for element in sentences]
 
 # Model, text, slider value, voice, audio format
 def update(m,t,s,v,af):
     if not torch.cuda.is_available():
-        cuda_device = _("No ROCm/CUDA device available.")
+        cuda_device = _('No ROCm/CUDA device available.')
         gr.Error(cuda_device) 
         print(cuda_device)
     else:
-        print(_("ROCm/CUDA device available."))
+        print(_('ROCm/CUDA device available.'))
 
-    print("\n",m,"\n",t,"\n",s,"\n",v,"\n",af)
+    print('\n',m,'\n',t,'\n',s,'\n',v,'\n',af)
     pipe = Pipeline(s2a_ref=m)
 
     speaker = pipe.default_speaker
@@ -148,10 +148,10 @@ def update(m,t,s,v,af):
         )
         filename = '%s/outputs/audio_%s.%s' % (os.path.dirname(os.path.realpath(__file__)), datetime.now().strftime('%Y-%m-%d_%H:%M:%S'), af)
         audio_segment.export(filename, format=af)
-        print(_("Audio file generated: %s") % filename)
+        print(_('Audio file generated: %s') % filename)
         return filename
     except Exception as e:
-        file_error = str(_("Error:"), f"{e}")
+        file_error = str(_('Error:'), f'{e}')
         gr.Error(file_error)
         print(file_error)
 
@@ -180,9 +180,9 @@ class WhisperSpeechHandler(BaseHTTPRequestHandler):
                 with open(output_file, 'rb') as file:
                     self.wfile.write(file.read())
             else:
-                self.send_error(500, _("Error generating audio."))
+                self.send_error(500, _('Error generating audio.'))
         else:
-            self.send_error(404, _("Not found."))
+            self.send_error(404, _('Not found.'))
 
     def do_OPTIONS(self):
         self.send_response(200)
@@ -194,13 +194,13 @@ class WhisperSpeechHandler(BaseHTTPRequestHandler):
 def run_api(host, port):
     server_address = (host, port)
     httpd = HTTPServer(server_address, WhisperSpeechHandler)
-    print(_("API running on http://%s:%s") % (host,port))
+    print(_('API running on http://%s:%s') % (host,port))
  
     httpd.serve_forever()
 
 # Gradio UI setup
 with gr.Blocks(
-    title=(_("WhisperSpeech Web UI")),
+    title=(_('WhisperSpeech Web UI')),
     css=css
     ) as demo:
 
@@ -210,21 +210,21 @@ with gr.Blocks(
         with gr.Column():
             gr.Markdown(info)
             
-            model = gr.Dropdown(choices=list(MODELS.values()), label=_("Model"), value=default_model, interactive=True)
+            model = gr.Dropdown(choices=list(MODELS.values()), label=_('Model'), value=default_model, interactive=True)
         
             text = gr.Textbox(
-                placeholder=_("Enter your text here..."),
-                label=_("Text"),
-                value=("English is default language.")
+                placeholder=_('Enter your text here...'),
+                label=_('Text'),
+                value=('English is default language.')
             )
 
-            description = _("You can use the *&lt;en&gt;* and *&lt;pl&gt;* tags to change languages and even combine them.")
-            warning = _("Combining languages can produce mixed results.")
-            example = _("Example:")
-            gr.Markdown("%s %s<br><br>%s<br>*&lt;pl&gt;To jest tekst w języku polskim.&lt;en&gt; And this is text in English.*" % (description, warning, example))
+            description = _('You can use the *&lt;en&gt;* and *&lt;pl&gt;* tags to change languages and even combine them.')
+            warning = _('Combining languages can produce mixed results.')
+            example = _('Example:')
+            gr.Markdown('%s %s<br><br>%s<br>*&lt;pl&gt;To jest tekst w języku polskim.&lt;en&gt; And this is text in English.*' % (description, warning, example))
 
             slider = gr.Slider(
-                label=_("Characters per second"),
+                label=_('Characters per second'),
                 minimum=10,
                 maximum=15,
                 value=13.5,
@@ -233,24 +233,24 @@ with gr.Blocks(
             )
             
             voice = gr.Audio(
-                label=_("Voice to clone (optional)"),
-                type="filepath"
+                label=_('Voice to clone (optional)'),
+                type='filepath'
             )
             
-            gr.Markdown("<br>")
+            gr.Markdown('<br>')
 
             formats = [
-                "wav",
-                "mp3",
-                "ogg"
+                'wav',
+                'mp3',
+                'ogg'
             ]
 
-            audio_format = gr.Dropdown(choices=formats, label=_("Audio format"), value=formats[0], interactive=True)
+            audio_format = gr.Dropdown(choices=formats, label=_('Audio format'), value=formats[0], interactive=True)
 
-            btn = gr.Button(_("Generate"),variant="primary")
+            btn = gr.Button(_('Generate'),variant='primary')
             
         out = gr.Audio(
-            label=_("Output"),
+            label=_('Output'),
             interactive = False
         )
         
@@ -275,36 +275,36 @@ def check_extension(filename):
     return filename.lower().endswith(allowed_extensions)
 
 # Main execution
-if __name__ == "__main__":
-    print(_("Version:") + " " + version)
-    host = "127.0.0.1"
+if __name__ == '__main__':
+    print(_('Version:') + ' ' + version)
+    host = '127.0.0.1'
     if args.listen or args.share:
-        host = "0.0.0.0"
+        host = '0.0.0.0'
 
     # Find an available port starting from the specified port
     port = find_available_port(args.port)
     if port != args.port:
-        print(_("Port %s is busy. Using port %s instead.") % (args.port,port))
+        print(_('Port %s is busy. Using port %s instead.') % (args.port,port))
 
     # Start API in a separate thread if enabled
     if args.api:
         if args.api_voice:
             if not os.path.exists(args.api_voice):
-                print(_("The specified voice file does not exist."))
+                print(_('The specified voice file does not exist.'))
                 sys.exit(1)
             
             if not check_extension(args.api_voice):
-                print(_("The specified voice file must be in mp3, wav, or ogg format."))
+                print(_('The specified voice file must be in mp3, wav, or ogg format.'))
                 sys.exit(1)
 
         api_host = host
         api_port = find_available_port(args.api_port)
         
         if api_port != args.api_port:
-            print(_("API port %s is busy. Using port %s instead.") % (args.api_port,api_port))
+            print(_('API port %s is busy. Using port %s instead.') % (args.api_port,api_port))
 
         if api_port == port:
-            print(_("API port %s is the same as the GUI port. Using port %s instead.") % (api_port,api_port + 1))
+            print(_('API port %s is the same as the GUI port. Using port %s instead.') % (api_port,api_port + 1))
             api_port = find_available_port(api_port + 1)
 
         print("\n")
@@ -315,11 +315,11 @@ if __name__ == "__main__":
     # Launch Gradio UI
     if args.auth is not None:
         try:
-            user, password = args.auth.split(":")
-            if user == "" or password == "" or user is None or password is None:
+            user, password = args.auth.split(':')
+            if user == '' or password == '' or user is None or password is None:
                 raise Exception
         except:
-            print(_("Invalid username and/or password."))
+            print(_('Invalid username and/or password.'))
             sys.exit(1)
 
         demo.launch(server_port=port, server_name=host, auth=(user,password), share=args.share)
