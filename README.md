@@ -64,6 +64,11 @@ CUDA 12.4:
 pip install -r requrements_cuda_12.1.txt
 ```
 
+ROCm 6.2
+```bash
+pip install -r requirements_rocm_6.2.txt
+```
+
 7\. Run:
 ```bash
 python webui.py
@@ -95,11 +100,6 @@ pybabel init -i ./locale/messages.pot -d ./locale -l pl_PL
 # Replace pl_PL by your language
 ```
 
-4\. Update:
-```bash
-pybabel update -i ./locale/messages.pot -d ./locale
-```
-
-5\. Compile:
+4\. Compile:
 ```bash
 pybabel compile -d ./locale

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-10-23 15:24+0200\n"
+"POT-Creation-Date: 2024-10-26 16:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,170 +17,169 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.16.0\n"
 
-#: webui.py:82 webui.py:88
+#: webui.py:64 webui.py:276
+msgid "Version:"
+msgstr ""
+
+#: webui.py:67
+#, python-format
+msgid "This is a simple web UI for the %s project."
+msgstr ""
+
+#: webui.py:92 webui.py:98
 msgid "<port>"
 msgstr ""
 
-#: webui.py:82
+#: webui.py:92
 msgid "Specify the server port for the GUI."
 msgstr ""
 
-#: webui.py:83
+#: webui.py:93
 msgid "<u>:<p>"
 msgstr ""
 
-#: webui.py:83
+#: webui.py:93
 msgid "Enter the username <u> and password <p> for authorization."
 msgstr ""
 
-#: webui.py:84
+#: webui.py:94
 msgid "Host the app on the local network."
 msgstr ""
 
-#: webui.py:85
+#: webui.py:95
 msgid "Create a public sharing tunnel."
 msgstr ""
 
-#: webui.py:86
+#: webui.py:96
 msgid "Show this help message and exit."
 msgstr ""
 
-#: webui.py:87
+#: webui.py:97
 msgid "Enable API mode."
 msgstr ""
 
-#: webui.py:88
+#: webui.py:98
 msgid "Specify the server port for the API."
 msgstr ""
 
-#: webui.py:89
+#: webui.py:99
 msgid "Select the default model tiny/small/base."
 msgstr ""
 
-#: webui.py:90
+#: webui.py:100
 msgid "<path>"
 msgstr ""
 
-#: webui.py:90
+#: webui.py:100
 msgid ""
 "Specify the path to an mp3, wav, or ogg file for voice cloning when using"
 " the API."
 msgstr ""
 
-#: webui.py:96
-#, python-format
-msgid "This is a simple web UI for the %s project. %s %s %s"
-msgstr ""
-
-#: webui.py:98 webui.py:273
-#, python-format
-msgid "Version: %s"
-msgstr ""
-
-#: webui.py:112
+#: webui.py:115
 msgid "No ROCm/CUDA device available."
 msgstr ""
 
-#: webui.py:116
+#: webui.py:119
 msgid "ROCm/CUDA device available."
 msgstr ""
 
-#: webui.py:147
+#: webui.py:150
 #, python-format
 msgid "Audio file generated: %s"
 msgstr ""
 
-#: webui.py:150
+#: webui.py:153
 msgid "Error:"
 msgstr ""
 
-#: webui.py:179
+#: webui.py:182
 msgid "Error generating audio."
 msgstr ""
 
-#: webui.py:181
+#: webui.py:184
 msgid "Not found."
 msgstr ""
 
-#: webui.py:193
+#: webui.py:196
 #, python-format
 msgid "API running on http://%s:%s"
 msgstr ""
 
-#: webui.py:199
+#: webui.py:202
 msgid "WhisperSpeech Web UI"
 msgstr ""
 
-#: webui.py:207
+#: webui.py:210
 msgid "Model"
 msgstr ""
 
-#: webui.py:210
+#: webui.py:213
 msgid "Enter your text here..."
 msgstr ""
 
-#: webui.py:211
+#: webui.py:214
 msgid "Text"
 msgstr ""
 
-#: webui.py:215
+#: webui.py:218
 msgid ""
 "You can use the *&lt;en&gt;* and *&lt;pl&gt;* tags to change languages "
 "and even combine them."
 msgstr ""
 
-#: webui.py:216
+#: webui.py:219
 msgid "Combining languages can produce mixed results."
 msgstr ""
 
-#: webui.py:217
+#: webui.py:220
 msgid "Example:"
 msgstr ""
 
-#: webui.py:221
+#: webui.py:224
 msgid "Characters per second"
 msgstr ""
 
-#: webui.py:230
+#: webui.py:233
 msgid "Voice to clone (optional)"
 msgstr ""
 
-#: webui.py:242
+#: webui.py:245
 msgid "Audio format"
 msgstr ""
 
-#: webui.py:244
+#: webui.py:247
 msgid "Generate"
 msgstr ""
 
-#: webui.py:247
+#: webui.py:250
 msgid "Output"
 msgstr ""
 
-#: webui.py:281
+#: webui.py:284
 #, python-format
 msgid "Port %s is busy. Using port %s instead."
 msgstr ""
 
-#: webui.py:287
+#: webui.py:290
 msgid "The specified voice file does not exist."
 msgstr ""
 
-#: webui.py:291
+#: webui.py:294
 msgid "The specified voice file must be in mp3, wav, or ogg format."
-msgstr ""
-
-#: webui.py:298
-#, python-format
-msgid "API port %s is busy. Using port %s instead."
 msgstr ""
 
 #: webui.py:301
 #, python-format
+msgid "API port %s is busy. Using port %s instead."
+msgstr ""
+
+#: webui.py:304
+#, python-format
 msgid "API port %s is the same as the GUI port. Using port %s instead."
 msgstr ""
 
-#: webui.py:316
+#: webui.py:319
 msgid "Invalid username and/or password."
 msgstr ""
 

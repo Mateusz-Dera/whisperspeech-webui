@@ -61,12 +61,9 @@ MODELS = {
 }
 
 # Text
-text_info = _('This is a simple web UI for the %s project.') % '<b>WhisperSpeech</b>'
-text_version = '<b>' + _('Version:') + '</b> ' + version
-
 info = '%s<br><br>%s<br><a>%s</a><br><a>%s</a>' % (
-    text_info,
-    text_version,
+    _('This is a simple web UI for the %s project.') % '<b>WhisperSpeech</b>',
+    '<b>' + _('Version:') + '</b> ' + version,
     'href="https://github.com/Mateusz-Dera/whisperspeech-webui">https://github.com/Mateusz-Dera/whisperspeech-webui',
     'https://github.com/collabora/WhisperSpeech">https://github.com/collabora/WhisperSpeech'
 )
