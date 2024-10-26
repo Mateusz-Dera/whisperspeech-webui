@@ -34,7 +34,7 @@ msgstr "<port>"
 
 #: webui.py:92
 msgid "Specify the server port for the GUI."
-msgstr "Podaj port dla interfejsu www."
+msgstr "Podaj port dla interfejsu."
 
 #: webui.py:93
 msgid "<u>:<p>"
