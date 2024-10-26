@@ -9,16 +9,16 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 > [!Note]
 > Version 2.x now allows voice generation via API.
 
-### Test platforms:
+### Test platform:
 |Name|Info|
 |:---|:---|
 |CPU|AMD Ryzen 7900X3D (iGPU disabled in BIOS)|
 |GPU|AMD Radeon 7900XTX|
 |RAM|64GB DDR5 6600MHz|
-|Motherboard|ASRock B650E PG Riptide WiFi (BIOS 2.10)|
+|Motherboard|ASRock B650E PG Riptide WiFi (3.08)|
 |OS|Ubuntu 24.04|
-|Kernel|6.8.0-39-generic|
-|ROCm|6.2.1|
+|Kernel|6.8.0-47-generic|
+|ROCm|6.2.2|
 
 |Name|Info|
 |:---|:---|
