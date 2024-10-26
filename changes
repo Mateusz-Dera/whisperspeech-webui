@@ -1,4 +1,0 @@
-Upgrade gradio to 5.4.0
-Drop support for CUDA < 12.4
-Drop support for ROCm < 6.2
-Added Custom CSS
