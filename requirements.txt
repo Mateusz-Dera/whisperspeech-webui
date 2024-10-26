@@ -1,4 +1,4 @@
---extra-index-url https://download.pytorch.org/whl/rocm6.2
+--extra-index-url https://download.pytorch.org/whl/cpu
 aiofiles==23.2.1
 annotated-types==0.7.0
 anyio==4.6.2.post1
@@ -41,7 +41,6 @@ pydub==0.25.1
 Pygments==2.18.0
 python-dateutil==2.9.0.post0
 python-multipart==0.0.12
-pytorch-triton-rocm==3.1.0
 pytz==2024.2
 PyYAML==6.0.2
 requests==2.32.3
@@ -63,8 +62,8 @@ speechbrain==0.5.16
 starlette==0.41.0
 sympy==1.13.1
 tomlkit==0.12.0
-torch==2.5.0+rocm6.2
-torchaudio==2.5.0+rocm6.2
+torch==2.5.0+cpu
+torchaudio==2.5.0+cpu
 tqdm==4.66.5
 typer==0.12.5
 typing_extensions==4.9.0

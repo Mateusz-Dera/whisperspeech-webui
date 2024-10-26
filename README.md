@@ -56,7 +56,7 @@ sudo apt install ffmpeg
 
 CPU (not recommended):
 ```bash
-TODO
+pip install -r requirements.txt
 ```
 
 CUDA 12.4:
