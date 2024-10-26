@@ -46,7 +46,6 @@ version = '2.2'
 css = '''
 a {color: orange;}
 ::selection {color: white; background: orange;}
-.center {text-align: center;}
 '''
 
 # Define translation domain and bind it to the 'locales' directory
@@ -61,10 +60,21 @@ MODELS = {
     'base': 'collabora/whisperspeech:s2a-q4-base-en+pl.model'
 }
 
+# Text
+text_info = _('This is a simple web UI for the %s project.') % '<b>WhisperSpeech</b>'
+text_version = '<b>' + _('Version:') + '</b> ' + version
+
+info = '%s<br><br>%s<br><a>%s</a><br><a>%s</a>' % (
+    text_info,
+    text_version,
+    'href="https://github.com/Mateusz-Dera/whisperspeech-webui">https://github.com/Mateusz-Dera/whisperspeech-webui',
+    'https://github.com/collabora/WhisperSpeech">https://github.com/collabora/WhisperSpeech'
+)
+
 def get_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
-        # doesn't even have to be reachable
+        # Doesn't even have to be reachable
         s.connect(('10.255.255.255', 1))
         IP = s.getsockname()[0]
     except Exception:
@@ -93,16 +103,6 @@ args = parser.parse_args()
 
 # Set the default model
 default_model = MODELS[args.model]
-
-text_info = _('This is a simple web UI for the %s project.') % '<b>WhisperSpeech</b>'
-text_version = '<b>' + _('Version:') + '</b> ' + version
-
-title = '<p class="center">%s</p>' % text_info
-info = '<br>%s<br><a>%s</a><br><a>%s</a>' % (
-    text_version,
-    'href="https://github.com/Mateusz-Dera/whisperspeech-webui">https://github.com/Mateusz-Dera/whisperspeech-webui',
-    'https://github.com/collabora/WhisperSpeech">https://github.com/collabora/WhisperSpeech'
-)
 
 def split_text(text):
     sentences_with_tags = re.findall(r'(<en>|<pl>)?\s*([^<]*)', text)
@@ -203,8 +203,6 @@ with gr.Blocks(
     title=(_('WhisperSpeech Web UI')),
     css=css
     ) as demo:
-
-    gr.Markdown(title)
 
     with gr.Row():
         with gr.Column():
