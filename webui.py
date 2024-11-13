@@ -40,7 +40,7 @@ from rich_argparse import RichHelpFormatter
 from whisperspeech.pipeline import Pipeline
 
 # Version
-version = '2.2'
+version = '2.2.1'
 
 # CSS
 css = '''
@@ -61,11 +61,11 @@ MODELS = {
 }
 
 # Text
-info = '%s<br><br>%s<br><a>%s</a><br><a>%s</a>' % (
+info = '%s<br><br>%s<br><a %s</a><br><a %s</a>' % (
     _('This is a simple web UI for the %s project.') % '<b>WhisperSpeech</b>',
     '<b>' + _('Version:') + '</b> ' + version,
     'href="https://github.com/Mateusz-Dera/whisperspeech-webui">https://github.com/Mateusz-Dera/whisperspeech-webui',
-    'https://github.com/collabora/WhisperSpeech">https://github.com/collabora/WhisperSpeech'
+    'href="https://github.com/collabora/WhisperSpeech">https://github.com/collabora/WhisperSpeech'
 )
 
 def get_ip():
@@ -111,7 +111,7 @@ def split_text(text):
 def update(m,t,s,v,af):
     if not torch.cuda.is_available():
         cuda_device = _('No ROCm/CUDA device available.')
-        gr.Error(cuda_device) 
+        gr.Error(cuda_device)
         print(cuda_device)
     else:
         print(_('ROCm/CUDA device available.'))
@@ -138,9 +138,9 @@ def update(m,t,s,v,af):
 
     try:
         audio_segment = AudioSegment(
-            np.tobytes(), 
-            frame_rate=24000, 
-            sample_width=2, 
+            np.tobytes(),
+            frame_rate=24000,
+            sample_width=2,
             channels=1
         )
         filename = '%s/outputs/audio_%s.%s' % (os.path.dirname(os.path.realpath(__file__)), datetime.now().strftime('%Y-%m-%d_%H:%M:%S'), af)
@@ -192,7 +192,7 @@ def run_api(host, port):
     server_address = (host, port)
     httpd = HTTPServer(server_address, WhisperSpeechHandler)
     print(_('API running on http://%s:%s') % (host,port))
- 
+
     httpd.serve_forever()
 
 # Gradio UI setup
@@ -204,9 +204,9 @@ with gr.Blocks(
     with gr.Row():
         with gr.Column():
             gr.Markdown(info)
-            
+
             model = gr.Dropdown(choices=list(MODELS.values()), label=_('Model'), value=default_model, interactive=True)
-        
+
             text = gr.Textbox(
                 placeholder=_('Enter your text here...'),
                 label=_('Text'),
@@ -226,12 +226,12 @@ with gr.Blocks(
                 step=0.25,
                 interactive=True
             )
-            
+
             voice = gr.Audio(
                 label=_('Voice to clone (optional)'),
                 type='filepath'
             )
-            
+
             gr.Markdown('<br>')
 
             formats = [
@@ -243,12 +243,12 @@ with gr.Blocks(
             audio_format = gr.Dropdown(choices=formats, label=_('Audio format'), value=formats[0], interactive=True)
 
             btn = gr.Button(_('Generate'),variant='primary')
-            
+
         out = gr.Audio(
             label=_('Output'),
             interactive = False
         )
-        
+
         btn.click(fn=update, inputs=[model,text,slider,voice,audio_format], outputs=out)
 
 def is_port_available(port):
@@ -287,14 +287,14 @@ if __name__ == '__main__':
             if not os.path.exists(args.api_voice):
                 print(_('The specified voice file does not exist.'))
                 sys.exit(1)
-            
+
             if not check_extension(args.api_voice):
                 print(_('The specified voice file must be in mp3, wav, or ogg format.'))
                 sys.exit(1)
 
         api_host = host
         api_port = find_available_port(args.api_port)
-        
+
         if api_port != args.api_port:
             print(_('API port %s is busy. Using port %s instead.') % (args.api_port,api_port))
 
