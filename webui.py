@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2024 Mateusz Dera
+# Copyright (c) 2024-2025 Mateusz Dera
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -40,7 +40,7 @@ from rich_argparse import RichHelpFormatter
 from whisperspeech.pipeline import Pipeline
 
 # Version
-version = '2.2.1'
+version = '2.3'
 
 # CSS
 css = '''
