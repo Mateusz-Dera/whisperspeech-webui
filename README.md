@@ -47,7 +47,7 @@ export HSA_OVERRIDE_GFX_VERSION=11.0.0
 ```
 5\. Install ffmpeg:
 
-Ubuntu 24.04/24.10:
+Ubuntu 24.04:
 ```bash
 sudo apt install ffmpeg
 ```
