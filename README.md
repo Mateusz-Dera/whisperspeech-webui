@@ -61,7 +61,7 @@ pip install -r requirements.txt
 
 CUDA 12.6:
 ```bash
-pip install -r requrements_cuda_12.4.txt
+pip install -r requrements_cuda_12.6.txt
 ```
 
 ROCm 6.3
