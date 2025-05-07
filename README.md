@@ -59,7 +59,7 @@ CPU (not recommended):
 pip install -r requirements.txt
 ```
 
-CUDA 12.4:
+CUDA 12.6:
 ```bash
 pip install -r requrements_cuda_12.4.txt
 ```
