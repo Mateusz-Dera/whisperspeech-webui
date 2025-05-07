@@ -4,7 +4,7 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 ![Preview](screenshot.png)
 
 ## Info
-[![Version](https://img.shields.io/badge/2.3-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
+[![Version](https://img.shields.io/badge/2.3.1-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
 
 > [!Note]
 > Version 2.x now allows voice generation via API.
@@ -15,9 +15,9 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 |CPU|AMD Ryzen 7900X3D (iGPU disabled in BIOS)|
 |GPU|AMD Radeon 7900XTX|
 |RAM|64GB DDR5 6600MHz|
-|Motherboard|ASRock B650E PG Riptide WiFi (3.18.AS02 Beta)|
+|Motherboard|ASRock B650E PG Riptide WiFi (3.20)|
 |OS|Ubuntu 24.04.2 LTS|
-|Kernel|6.11.0-17-generic|
+|Kernel|6.11.0-25-generic|
 |ROCm|6.3.1|
 
 |Name|Info|
@@ -64,9 +64,9 @@ CUDA 12.4:
 pip install -r requrements_cuda_12.4.txt
 ```
 
-ROCm 6.2.4
+ROCm 6.3
 ```bash
-pip install -r requirements_rocm_6.2.4.txt
+pip install -r requirements_rocm_6.3.txt
 ```
 
 7\. Run:
