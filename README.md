@@ -1,13 +1,11 @@
 # WhisperSpeech web UI
 Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 
-![Preview](screenshot.png)
-
 ## Info
 [![Version](https://img.shields.io/badge/3.0-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
 
 > [!Note]
-> Version 2.x now allows voice generation via API.
+> Versions 2.x and 3.x allows voice generation via API.
 
 ### Test platform:
 |Name|Info|
@@ -32,7 +30,7 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 |CUDA|12.8|
 
 ## Instalation:
-1\. Install uv
+1\. Install uv and ffmpeg
 
 2\. Clone repository
 
@@ -40,19 +38,7 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 
 3\. Create and activate venv using uv
 
-4\. For ROCm set HSA_OVERRIDE_GFX_VERSION.
-For the Radeon 7900XTX:
-```bash
-export HSA_OVERRIDE_GFX_VERSION=11.0.0
-```
-5\. Install ffmpeg:
-
-Ubuntu 24.04:
-```bash
-sudo apt install ffmpeg
-```
-
-6\. Run webui.py
+4\. Run webui.py
 
 CPU (not recommended):
 ```bash
