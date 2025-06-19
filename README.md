@@ -59,7 +59,7 @@ CPU (not recommended):
 uv run --extra cpu webui.py
 ```
 
-ROCm 6.4:
+ROCm 6.3:
 ```bash
 uv run --extra rocm webui.py
 ```
@@ -71,22 +71,24 @@ uv run --extra rocm webui.py
 |Polish|
 
 <!-- TRANSLATION -->
-1\. Install PyBabel:
-```bash
-pip install babel==2.16.0
-```
-
-2\. Extract messages.pot:
+1\. Extract messages.pot:
 ```bash
 pybabel extract -F babel.cfg -o ./locale/messages.pot . 
 ```
 
-3\. Create new:
+2\. Generate files:
+New language:
 ```bash
 pybabel init -i ./locale/messages.pot -d ./locale -l pl_PL
 # Replace pl_PL by your language
 ```
 
-4\. Compile:
+Update current:
+```bash
+pybabel update -i ./locale/messages.pot -d ./locale -l pl_PL
+# Replace pl_PL by your language
+```
+
+3\. Compile:
 ```bash
 pybabel compile -d ./locale

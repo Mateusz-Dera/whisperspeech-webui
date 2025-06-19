@@ -46,6 +46,15 @@ wheels = [
 ]
 
 [[package]]
+name = "babel"
+version = "2.16.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/2a/74/f1bc80f23eeba13393b7222b11d95ca3af2c1e28edca18af487137eefed9/babel-2.16.0.tar.gz", hash = "sha256:d1f3554ca26605fe173f3de0c65f750f5a42f924499bf134de6423582298e316", size = 9348104, upload-time = "2024-08-08T14:25:45.459Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ed/20/bc79bc575ba2e2a7f70e8a1155618bb1301eaa5132a8271373a6903f73f8/babel-2.16.0-py3-none-any.whl", hash = "sha256:368b5b98b37c06b7daf6696391c3240c938b37767d4584413e8438c5c435fa8b", size = 9587599, upload-time = "2024-08-08T14:25:42.686Z" },
+]
+
+[[package]]
 name = "braceexpand"
 version = "0.1.7"
 source = { registry = "https://pypi.org/simple" }
@@ -1242,6 +1251,7 @@ name = "whisperspeech-webui"
 version = "3.0.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "babel" },
     { name = "gradio" },
     { name = "rich-argparse" },
     { name = "webdataset" },
@@ -1263,6 +1273,7 @@ rocm = [
 
 [package.metadata]
 requires-dist = [
+    { name = "babel", specifier = "==2.16.0" },
     { name = "gradio", specifier = "==5.34.1" },
     { name = "pytorch-triton-rocm", marker = "extra == 'rocm'", index = "https://download.pytorch.org/whl/rocm6.3", conflict = { package = "whisperspeech-webui", extra = "rocm" } },
     { name = "rich-argparse", specifier = "==1.7.1" },
