@@ -1,0 +1,56 @@
+[project]
+name = "whisperspeech-webui"
+version = "3.0.0"
+description = "Web UI for WhisperSpeech"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "gradio==5.34.1",
+    "rich-argparse==1.7.1",
+    "webdataset==0.2.111",
+    "whisperspeech==0.8.9",
+]
+
+[project.optional-dependencies]
+cpu = [
+    "torch==2.7.1", 
+    "torchaudio==2.7.1"
+]
+rocm = [
+    "torch==2.7.1",
+    "torchaudio==2.7.1",
+    "pytorch-triton-rocm"
+]
+
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cpu", extra = "cpu" },
+    { index = "pytorch-rocm", extra = "rocm" },
+]
+
+torchaudio = [
+    { index = "pytorch-cpu", extra = "cpu" },
+    { index = "pytorch-rocm", extra = "rocm" },
+]
+
+pytorch-triton-rocm = [
+    { index = "pytorch-rocm", extra = "rocm" }
+    ]
+
+[tool.uv]
+conflicts = [
+    [
+        { extra = "cpu" }, 
+        { extra = "rocm" }
+    ]
+]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-rocm"
+url = "https://download.pytorch.org/whl/rocm6.3"
+explicit = true

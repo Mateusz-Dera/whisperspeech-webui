@@ -4,21 +4,21 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 ![Preview](screenshot.png)
 
 ## Info
-[![Version](https://img.shields.io/badge/2.3.1-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
+[![Version](https://img.shields.io/badge/3.0-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
 
 > [!Note]
 > Version 2.x now allows voice generation via API.
 
-### Test platforms:
+### Test platform:
 |Name|Info|
 |:---|:---|
-|CPU|AMD Ryzen 7900X3D (iGPU disabled in BIOS)|
+|CPU|AMD Ryzen 9950X3D (iGPU disabled in BIOS)|
 |GPU|AMD Radeon 7900XTX|
 |RAM|64GB DDR5 6600MHz|
-|Motherboard|ASRock B650E PG Riptide WiFi (3.20)|
+|Motherboard|ASRock B650E PG Riptide WiFi (BIOS 3.25)|
 |OS|Ubuntu 24.04.2 LTS|
-|Kernel|6.11.0-25-generic|
-|ROCm|6.3.1|
+|Kernel|6.11.0-26-generic|
+|ROCm|6.4.1|
 
 |Name|Info|
 |:---|:---|
@@ -32,13 +32,13 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 |CUDA|12.4|
 
 ## Instalation:
-1\. Install Python 3.12
+1\. Install uv
 
 2\. Clone repository
 
 3\. Mount the repository directory.
 
-3\. Create and activate venv
+3\. Create and activate venv using uv
 
 4\. For ROCm set HSA_OVERRIDE_GFX_VERSION.
 For the Radeon 7900XTX:
@@ -52,31 +52,18 @@ Ubuntu 24.04:
 sudo apt install ffmpeg
 ```
 
-6\. Install requirements
+6\. Run webui.py
 
 CPU (not recommended):
 ```bash
-pip install -r requirements.txt
+uv run --extra cpu webui.py
 ```
 
-CUDA 12.6:
+ROCm 6.4:
 ```bash
-pip install -r requrements_cuda_12.6.txt
+uv run --extra rocm webui.py
 ```
 
-ROCm 6.3
-```bash
-pip install -r requirements_rocm_6.3.txt
-```
-
-7\. Run:
-```bash
-python webui.py
-```
-With -h or --help for help:
-```bash
-python webui.py -h
-```
 ## GUI tanslation:
 |Languages|
 |:---|
