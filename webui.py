@@ -40,7 +40,7 @@ from rich_argparse import RichHelpFormatter
 from whisperspeech.pipeline import Pipeline
 
 # Version
-version = '2.3.1'
+version = '3.0'
 
 # CSS
 css = '''
@@ -59,6 +59,9 @@ MODELS = {
     'small': 'collabora/whisperspeech:s2a-q4-small-en+pl.model',
     'base': 'collabora/whisperspeech:s2a-q4-base-en+pl.model'
 }
+
+# Model cache for performance
+model_cache = {}
 
 # Text
 info = '%s<br><br>%s<br><a %s</a><br><a %s</a>' % (
@@ -107,8 +110,16 @@ def split_text(text):
 
     return ['  ' + element[1] + '  '  for element in sentences],[element[0] for element in sentences]
 
+def load_model(model_name):
+    """Load model with caching for better performance"""
+    global model_cache
+    if model_name not in model_cache:
+        print(_('Loading model: %s') % model_name)
+        model_cache[model_name] = Pipeline(s2a_ref=model_name)
+    return model_cache[model_name]
+
 # Model, text, slider value, voice, audio format
-def update(m,t,s,v,af):
+def update(m, t, s, v, af):
     if not torch.cuda.is_available():
         cuda_device = _('No ROCm/CUDA device available.')
         gr.Error(cuda_device)
@@ -116,39 +127,110 @@ def update(m,t,s,v,af):
     else:
         print(_('ROCm/CUDA device available.'))
 
-    print('\n',m,'\n',t,'\n',s,'\n',v,'\n',af)
-    pipe = Pipeline(s2a_ref=m)
+    print('\n', m, '\n', t, '\n', s, '\n', v, '\n', af)
+    
+    # Load or get cached model
+    pipe = load_model(m)
 
-    speaker = pipe.default_speaker
-
-    if v != None:
+    # Handle voice cloning if provided
+    speaker = None
+    if v is not None:
         speaker = pipe.extract_spk_emb(v)
 
-    split = split_text(t)
-    print(split[0])
-    print(split[1])
-    tensor = pipe.vocoder.decode(pipe.s2a.generate(pipe.t2s.generate(split[0], cps=s, lang=split[1])[0], speaker.unsqueeze(0)))
-
-    np = (tensor.cpu().numpy() * 32767).astype(numpy.int16)
-
-    if len(np.shape) == 1:
-        np = np.expand_dims(np, axis=0)
+    # Split text and get language tags
+    split_sentences, split_langs = split_text(t)
+    print(split_sentences)
+    print(split_langs)
+    
+    # Generate audio for each sentence segment
+    audio_segments = []
+    
+    for sentence, lang in zip(split_sentences, split_langs):
+        if sentence.strip():  # Only process non-empty sentences
+            try:
+                # Generate audio using the new API
+                # The new generate method handles text, language, speed, and speaker internally
+                if speaker is not None:
+                    # With voice cloning
+                    audio_tensor = pipe.generate(
+                        sentence,
+                        lang=lang,
+                        cps=s,
+                        speaker=speaker
+                    )
+                else:
+                    # Without voice cloning (use default speaker)
+                    audio_tensor = pipe.generate(
+                        sentence,
+                        lang=lang,
+                        cps=s
+                    )
+                
+                audio_segments.append(audio_tensor)
+                
+            except TypeError:
+                # Fallback if the new API doesn't support all parameters
+                # Try without lang and cps parameters
+                try:
+                    if speaker is not None:
+                        audio_tensor = pipe.generate(sentence, speaker=speaker)
+                    else:
+                        audio_tensor = pipe.generate(sentence)
+                    audio_segments.append(audio_tensor)
+                except Exception as e:
+                    print(f"Error generating segment: {e}")
+                    # Final fallback to old method if needed
+                    old_tensor = pipe.vocoder.decode(
+                        pipe.s2a.generate(
+                            pipe.t2s.generate([sentence], cps=s, lang=[lang])[0],
+                            speaker.unsqueeze(0) if speaker is not None else pipe.default_speaker.unsqueeze(0)
+                        )
+                    )
+                    audio_segments.append(old_tensor)
+    
+    # Concatenate all audio segments
+    if len(audio_segments) > 1:
+        # Convert to numpy arrays and concatenate
+        np_segments = []
+        for tensor in audio_segments:
+            np_seg = (tensor.cpu().numpy() * 32767).astype(numpy.int16)
+            if len(np_seg.shape) == 1:
+                np_seg = numpy.expand_dims(np_seg, axis=0)
+            else:
+                np_seg = np_seg.T
+            np_segments.append(np_seg)
+        
+        # Concatenate along the time axis
+        np = numpy.concatenate(np_segments, axis=1)
     else:
-        np = np.T
+        # Single segment
+        tensor = audio_segments[0] if audio_segments else None
+        if tensor is None:
+            return None
+            
+        np = (tensor.cpu().numpy() * 32767).astype(numpy.int16)
+        if len(np.shape) == 1:
+            np = numpy.expand_dims(np, axis=0)
+        else:
+            np = np.T
 
     try:
+        # Create outputs directory if it doesn't exist
+        outputs_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'outputs')
+        os.makedirs(outputs_dir, exist_ok=True)
+        
         audio_segment = AudioSegment(
             np.tobytes(),
             frame_rate=24000,
             sample_width=2,
             channels=1
         )
-        filename = '%s/outputs/audio_%s.%s' % (os.path.dirname(os.path.realpath(__file__)), datetime.now().strftime('%Y-%m-%d_%H:%M:%S'), af)
+        filename = os.path.join(outputs_dir, 'audio_%s.%s' % (datetime.now().strftime('%Y-%m-%d_%H-%M-%S'), af))
         audio_segment.export(filename, format=af)
         print(_('Audio file generated: %s') % filename)
         return filename
     except Exception as e:
-        file_error = str(_('Error:'), f'{e}')
+        file_error = str(_('Error:')) + f' {e}'
         gr.Error(file_error)
         print(file_error)
 
