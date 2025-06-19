@@ -30,15 +30,15 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 |CUDA|12.8|
 
 ## Instalation:
-1\. Install uv and ffmpeg
+1\. Install uv and ffmpeg.
 
-2\. Clone repository
+2\. Clone repository.
 
 3\. Mount the repository directory.
 
-3\. Create and activate venv using uv
+3\. Create and activate venv using uv.
 
-4\. Run webui.py
+4\. Run webui.py:
 
 CPU (not recommended):
 ```bash
@@ -48,6 +48,11 @@ uv run --extra cpu webui.py
 ROCm 6.3:
 ```bash
 uv run --extra rocm webui.py
+```
+
+CUDA 12.8:
+```bash
+uv run --extra cuda webui.py
 ```
 
 ## GUI tanslation:
@@ -78,3 +83,4 @@ pybabel update -i ./locale/messages.pot -d ./locale -l pl_PL
 3\. Compile:
 ```bash
 pybabel compile -d ./locale
+```
