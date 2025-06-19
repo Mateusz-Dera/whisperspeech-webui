@@ -68,6 +68,7 @@ pybabel extract -F babel.cfg -o ./locale/messages.pot .
 ```
 
 2\. Generate files:
+
 New language:
 ```bash
 pybabel init -i ./locale/messages.pot -d ./locale -l pl_PL
