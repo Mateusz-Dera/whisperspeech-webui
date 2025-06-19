@@ -27,9 +27,9 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 |RAM|16GB DDR4 3200MHz|
 |Motherboard|GIGABYTE G5 MF (BIOS FB10)|
 |OS|Ubuntu 24.04.2 LTS|
-|Kernel|6.11.0-17-generic|
-|NVIDIA Driver|550.120|
-|CUDA|12.4|
+|Kernel|6.11.0-26-generic|
+|NVIDIA Driver|570.133.07|
+|CUDA|12.8|
 
 ## Instalation:
 1\. Install uv
