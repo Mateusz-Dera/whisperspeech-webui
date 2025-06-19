@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-06-19 19:57+0200\n"
+"POT-Creation-Date: 2025-06-19 23:00+0200\n"
 "PO-Revision-Date: 2024-10-23 12:28+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pl_PL\n"
@@ -17,14 +17,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.16.0\n"
+"Generated-By: Babel 2.10.3\n"
 
 #: webui.py:68
 #, python-format
 msgid "This is a simple web UI for the %s project."
 msgstr "Prosty interfejs dla %s."
 
-#: webui.py:69 webui.py:356
+#: webui.py:69 webui.py:368
 msgid "Version:"
 msgstr "Wersja:"
 
@@ -157,40 +157,44 @@ msgstr "Głos do sklonowania (opcjonalny)"
 msgid "Audio format"
 msgstr "Format audio"
 
-#: webui.py:327
+#: webui.py:328
 msgid "Generate"
-msgstr "Generowanie"
+msgstr "Generuj"
 
 #: webui.py:330
+msgid "Autoplay"
+msgstr "Autoodtwarzanie"
+
+#: webui.py:336
 msgid "Output"
 msgstr "Wyjście"
 
-#: webui.py:364
+#: webui.py:376
 #, python-format
 msgid "Port %s is busy. Using port %s instead."
 msgstr "Port %s jest zajęty. W zamian zostanie użyty port %s."
 
-#: webui.py:370
+#: webui.py:382
 msgid "The specified voice file does not exist."
 msgstr "Podany plik z głosem do sklonowania nie istnieje."
 
-#: webui.py:374
+#: webui.py:386
 msgid "The specified voice file must be in mp3, wav, or ogg format."
 msgstr "Plik z glosem do sklonowania musli być w formacie mp3, wav lub ogg."
 
-#: webui.py:381
+#: webui.py:393
 #, python-format
 msgid "API port %s is busy. Using port %s instead."
 msgstr "Port %s jest zajęty. W zamian dla API zostanie użyty port %s."
 
-#: webui.py:384
+#: webui.py:396
 #, python-format
 msgid "API port %s is the same as the GUI port. Using port %s instead."
 msgstr ""
 "Podany port %s dla API jest już zajęty przez interfejs. W zamian dla API "
 "zostanie użyty port %s."
 
-#: webui.py:399
+#: webui.py:411
 msgid "Invalid username and/or password."
 msgstr "Nieprawidłowy użytkownik i/lub hasło."
 

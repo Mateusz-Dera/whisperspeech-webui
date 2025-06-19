@@ -1,6 +1,6 @@
 <!-- MIT License
 
-Copyright (c) 2024 Mateusz Dera
+Copyright (c) 2024-2025 Mateusz Dera
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -54,6 +54,36 @@ SOFTWARE. -->
         .row input {
             flex: 1;
         }
+        #audioControls {
+            display: none;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        #downloadBtn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        #downloadBtn:hover {
+            background-color: #45a049;
+        }
+        #downloadBtn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .audio-info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
@@ -89,11 +119,21 @@ Multiple languages:
         <button type="submit">Generate Audio</button>
     </form>
 
-    <audio id="audioPlayer" controls style="display: none; margin-top: 20px;"></audio>
+    <div id="audioControls">
+        <audio id="audioPlayer" controls style="width: 100%;"></audio>
+        <button id="downloadBtn" disabled>Download Audio</button>
+        <div class="audio-info" id="audioInfo"></div>
+    </div>
 
     <script>
         const form = document.getElementById('ttsForm');
         const audioPlayer = document.getElementById('audioPlayer');
+        const audioControls = document.getElementById('audioControls');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const audioInfo = document.getElementById('audioInfo');
+        
+        let currentBlob = null;
+        let currentFormat = null;
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -106,6 +146,10 @@ Multiple languages:
 
             const apiUrl = `http://${ip}:${port}/generate`;
 
+            // Disable download button while generating
+            downloadBtn.disabled = true;
+            downloadBtn.textContent = 'Generating...';
+
             try {
                 const response = await fetch(apiUrl, {
                     method: 'POST',
@@ -116,17 +160,51 @@ Multiple languages:
                 });
 
                 if (response.ok) {
-                    const blob = await response.blob();
-                    const url = URL.createObjectURL(blob);
+                    currentBlob = await response.blob();
+                    currentFormat = format;
+                    
+                    const url = URL.createObjectURL(currentBlob);
                     audioPlayer.src = url;
-                    audioPlayer.style.display = 'block';
+                    audioControls.style.display = 'block';
                     audioPlayer.play();
+                    
+                    // Enable download button
+                    downloadBtn.disabled = false;
+                    downloadBtn.textContent = `Download ${format.toUpperCase()}`;
+                    
+                    // Show file info
+                    const fileSizeKB = (currentBlob.size / 1024).toFixed(2);
+                    audioInfo.innerHTML = `Size: ${fileSizeKB} KB | Format: ${format.toUpperCase()}`;
                 } else {
                     throw new Error('Server response was not ok.');
                 }
             } catch (error) {
                 console.error('Error:', error);
                 alert('Error generating audio. Please check the API address and try again.');
+                downloadBtn.textContent = 'Download Audio';
+                audioInfo.innerHTML = '';
+            }
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            if (currentBlob && currentFormat) {
+                // Create download link
+                const url = URL.createObjectURL(currentBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                
+                // Generate filename with timestamp
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-').split('T')[0] + '_' + 
+                                new Date().toTimeString().split(' ')[0].replace(/:/g, '-');
+                a.download = `whisperspeech_${timestamp}.${currentFormat}`;
+                
+                // Trigger download
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                // Clean up
+                setTimeout(() => URL.revokeObjectURL(url), 100);
             }
         });
     </script>

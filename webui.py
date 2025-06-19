@@ -40,7 +40,7 @@ from rich_argparse import RichHelpFormatter
 from whisperspeech.pipeline import Pipeline
 
 # Version
-version = '3.0'
+version = '3.1.0'
 
 # CSS
 css = '''
@@ -118,8 +118,8 @@ def load_model(model_name):
         model_cache[model_name] = Pipeline(s2a_ref=model_name)
     return model_cache[model_name]
 
-# Model, text, slider value, voice, audio format
-def update(m, t, s, v, af):
+# Model, text, slider value, voice, audio format, autoplay
+def update(m, t, s, v, af, ap):
     if not torch.cuda.is_available():
         cuda_device = _('No ROCm/CUDA device available.')
         gr.Error(cuda_device)
@@ -127,7 +127,7 @@ def update(m, t, s, v, af):
     else:
         print(_('ROCm/CUDA device available.'))
 
-    print('\n', m, '\n', t, '\n', s, '\n', v, '\n', af)
+    print('\n', m, '\n', t, '\n', s, '\n', v, '\n', af, '\n', ap)
     
     # Load or get cached model
     pipe = load_model(m)
@@ -249,7 +249,7 @@ class WhisperSpeechHandler(BaseHTTPRequestHandler):
             # Use the API voice if specified
             voice = args.api_voice if args.api_voice else None
 
-            output_file = update(default_model, text, speed, voice, audio_format)
+            output_file = update(default_model, text, speed, voice, audio_format, False)
 
             if output_file:
                 self.send_response(200)
@@ -324,14 +324,26 @@ with gr.Blocks(
 
             audio_format = gr.Dropdown(choices=formats, label=_('Audio format'), value=formats[0], interactive=True)
 
-            btn = gr.Button(_('Generate'),variant='primary')
+            with gr.Row():
+                btn = gr.Button(_('Generate'),variant='primary')
+                autoplay = gr.Checkbox(
+                    label=_('Autoplay'),
+                    value=True,
+                    interactive=True
+                )
 
         out = gr.Audio(
             label=_('Output'),
-            interactive = False
+            interactive = False,
+            autoplay=True
         )
 
-        btn.click(fn=update, inputs=[model,text,slider,voice,audio_format], outputs=out)
+        # Update audio component with autoplay value
+        def update_audio_and_autoplay(m, t, s, v, af, ap):
+            audio_file = update(m, t, s, v, af, ap)
+            return gr.Audio(value=audio_file, autoplay=ap)
+
+        btn.click(fn=update_audio_and_autoplay, inputs=[model,text,slider,voice,audio_format,autoplay], outputs=out)
 
 def is_port_available(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:

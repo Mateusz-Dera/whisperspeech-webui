@@ -2,7 +2,7 @@
 Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 
 ## Info
-[![Version](https://img.shields.io/badge/3.0-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
+[![Version](https://img.shields.io/badge/3.1.0-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
 
 > [!Note]
 > Versions 2.x and 3.x allow voice generation via API.
