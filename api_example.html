@@ -116,6 +116,13 @@ Multiple languages:
             <option value="ogg">OGG</option>
         </select>
 
+        <label for="model">Model:</label>
+        <select id="model" required>
+            <option value="tiny" selected>Tiny</option>
+            <option value="small">Small</option>
+            <option value="base">Base</option>
+        </select>
+
         <button type="submit">Generate Audio</button>
     </form>
 
@@ -143,6 +150,7 @@ Multiple languages:
             const text = document.getElementById('text').value;
             const speed = document.getElementById('speed').value;
             const format = document.getElementById('format').value;
+            const model = document.getElementById('model').value;
 
             const apiUrl = `http://${ip}:${port}/generate`;
 
@@ -156,7 +164,7 @@ Multiple languages:
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ text, speed: parseFloat(speed), format }),
+                    body: JSON.stringify({ text, speed: parseFloat(speed), format, model }),
                 });
 
                 if (response.ok) {

@@ -40,7 +40,7 @@ from rich_argparse import RichHelpFormatter
 from whisperspeech.pipeline import Pipeline
 
 # Version
-version = '3.1.0'
+version = '3.0'
 
 # CSS
 css = '''
@@ -245,11 +245,15 @@ class WhisperSpeechHandler(BaseHTTPRequestHandler):
             text = data.get('text', '')
             speed = data.get('speed', 13.5)
             audio_format = data.get('format', 'wav')
+            model_key = data.get('model', args.model)  # Use default model if not specified
+
+            # Map model key to full model name
+            model = MODELS.get(model_key, default_model)
 
             # Use the API voice if specified
             voice = args.api_voice if args.api_voice else None
 
-            output_file = update(default_model, text, speed, voice, audio_format, False)
+            output_file = update(model, text, speed, voice, audio_format, False)
 
             if output_file:
                 self.send_response(200)
