@@ -33,8 +33,9 @@ import shutil
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import parse_qs
 import socket
-import cgi
 import io
+from email.parser import BytesParser
+from email.message import EmailMessage
 
 import torch
 import gradio as gr
@@ -269,6 +270,82 @@ def cleanup_temp_file(filepath):
     except Exception as e:
         print(f"Error cleaning up temporary file {filepath}: {e}")
 
+def parse_multipart_form_data(body, boundary):
+    """Parse multipart form data without using cgi module"""
+    # Add the required dashes to boundary
+    boundary = b'--' + boundary
+    
+    # Split the body by boundary
+    parts = body.split(boundary)
+    
+    form_data = {}
+    files = {}
+    
+    for part in parts[1:-1]:  # Skip first (empty) and last (closing boundary)
+        if not part.strip():
+            continue
+            
+        # Split headers and content
+        try:
+            header_end = part.find(b'\r\n\r\n')
+            if header_end == -1:
+                header_end = part.find(b'\n\n')
+                if header_end == -1:
+                    continue
+                headers_raw = part[:header_end]
+                content = part[header_end+2:]
+            else:
+                headers_raw = part[:header_end]
+                content = part[header_end+4:]
+            
+            # Parse headers
+            headers = {}
+            for header_line in headers_raw.split(b'\n'):
+                header_line = header_line.strip()
+                if b':' in header_line:
+                    key, value = header_line.split(b':', 1)
+                    headers[key.strip().lower()] = value.strip()
+            
+            # Extract field name and filename from Content-Disposition
+            content_disposition = headers.get(b'content-disposition', b'')
+            field_name = None
+            filename = None
+            
+            # Parse Content-Disposition header
+            for item in content_disposition.split(b';'):
+                item = item.strip()
+                if item.startswith(b'name='):
+                    field_name = item[5:].strip(b'"\'')
+                elif item.startswith(b'filename='):
+                    filename = item[9:].strip(b'"\'')
+            
+            if not field_name:
+                continue
+                
+            # Remove trailing CRLF if present
+            if content.endswith(b'\r\n'):
+                content = content[:-2]
+            elif content.endswith(b'\n'):
+                content = content[:-1]
+            
+            # Store the data
+            field_name = field_name.decode('utf-8', errors='replace')
+            if filename:
+                # It's a file
+                files[field_name] = {
+                    'filename': filename.decode('utf-8', errors='replace'),
+                    'data': content
+                }
+            else:
+                # It's a regular form field
+                form_data[field_name] = content.decode('utf-8', errors='replace')
+                
+        except Exception as e:
+            print(f"Error parsing multipart part: {e}")
+            continue
+    
+    return form_data, files
+
 # API functionality
 class WhisperSpeechHandler(BaseHTTPRequestHandler):
     def do_POST(self):
@@ -279,39 +356,46 @@ class WhisperSpeechHandler(BaseHTTPRequestHandler):
                 
                 if content_type.startswith('multipart/form-data'):
                     # Handle multipart form data (file upload)
-                    form = cgi.FieldStorage(
-                        fp=self.rfile,
-                        headers=self.headers,
-                        environ={
-                            'REQUEST_METHOD': 'POST',
-                            'CONTENT_TYPE': self.headers['Content-Type'],
-                        }
-                    )
+                    # Extract boundary from content type
+                    boundary = None
+                    for item in content_type.split(';'):
+                        item = item.strip()
+                        if item.startswith('boundary='):
+                            boundary = item[9:].strip('"\'')
+                            break
+                    
+                    if not boundary:
+                        self.send_error(400, _('No boundary found in multipart request.'))
+                        return
+                    
+                    # Read the body
+                    content_length = int(self.headers['Content-Length'])
+                    body = self.rfile.read(content_length)
+                    
+                    # Parse multipart data
+                    form_data, files = parse_multipart_form_data(body, boundary.encode())
                     
                     # Extract form fields
-                    text = form.getvalue('text', '')
-                    speed = float(form.getvalue('speed', 13.5))
-                    audio_format = form.getvalue('format', 'wav')
-                    model_key = form.getvalue('model', args.model)
+                    text = form_data.get('text', '')
+                    speed = float(form_data.get('speed', 13.5))
+                    audio_format = form_data.get('format', 'wav')
+                    model_key = form_data.get('model', args.model)
                     
                     # Handle uploaded voice file
                     voice_file = None
-                    if 'voice' in form:
-                        voice_field = form['voice']
-                        if voice_field.filename and voice_field.file:
-                            # Validate file extension
-                            if not check_extension(voice_field.filename):
-                                self.send_error(400, _('Invalid file format. Please use mp3, wav, or ogg.'))
-                                return
-                            
-                            # Read file data
-                            voice_field.file.seek(0)
-                            file_data = voice_field.file.read()
-                            
-                            # Save to temporary file
-                            temp_voice_file = save_uploaded_file(file_data, voice_field.filename)
-                            voice_file = temp_voice_file
-                            print(f"Uploaded voice file saved: {temp_voice_file}")
+                    if 'voice' in files:
+                        voice_data = files['voice']
+                        filename = voice_data['filename']
+                        
+                        # Validate file extension
+                        if not check_extension(filename):
+                            self.send_error(400, _('Invalid file format. Please use mp3, wav, or ogg.'))
+                            return
+                        
+                        # Save to temporary file
+                        temp_voice_file = save_uploaded_file(voice_data['data'], filename)
+                        voice_file = temp_voice_file
+                        print(f"Uploaded voice file saved: {temp_voice_file}")
                     
                 elif content_type.startswith('application/json'):
                     # Handle JSON data (no file upload)
