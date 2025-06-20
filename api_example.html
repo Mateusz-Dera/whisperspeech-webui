@@ -31,28 +31,48 @@ SOFTWARE. -->
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         form {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 15px;
         }
         label {
             font-weight: bold;
+            margin-bottom: 5px;
         }
-        input, select, button {
-            padding: 5px;
+        input, select, button, textarea {
+            padding: 8px;
             font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
         button {
             cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
         }
         .row {
             display: flex;
             gap: 10px;
         }
-        .row input {
+        .row > div {
             flex: 1;
+        }
+        .row input {
+            width: 100%;
+            box-sizing: border-box;
         }
         #audioControls {
             display: none;
@@ -63,7 +83,7 @@ SOFTWARE. -->
             background-color: #f9f9f9;
         }
         #downloadBtn {
-            background-color: #4CAF50;
+            background-color: #28a745;
             color: white;
             padding: 10px 20px;
             border: none;
@@ -73,7 +93,7 @@ SOFTWARE. -->
             margin-top: 10px;
         }
         #downloadBtn:hover {
-            background-color: #45a049;
+            background-color: #218838;
         }
         #downloadBtn:disabled {
             background-color: #cccccc;
@@ -83,6 +103,64 @@ SOFTWARE. -->
             margin-top: 10px;
             font-size: 14px;
             color: #666;
+        }
+        .voice-section {
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+        .voice-section h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            width: 100%;
+        }
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+        .file-input-display {
+            display: block;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+            min-height: 20px;
+        }
+        .file-input-display:hover {
+            background-color: #f8f9fa;
+        }
+        .file-selected {
+            color: #28a745;
+        }
+        .file-placeholder {
+            color: #6c757d;
+        }
+        .clear-file-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .clear-file-btn:hover {
+            background-color: #c82333;
+        }
+        .note {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
         }
     </style>
 </head>
@@ -123,7 +201,20 @@ Multiple languages:
             <option value="base">Base</option>
         </select>
 
-        <button type="submit">Generate Audio</button>
+        <div class="voice-section">
+            <h3>Voice Cloning (Optional)</h3>
+            <label for="voiceFile">Upload Voice Sample:</label>
+            <div class="file-input-wrapper">
+                <input type="file" id="voiceFile" accept=".mp3,.wav,.ogg,audio/*">
+                <div class="file-input-display" id="fileDisplay">
+                    <span class="file-placeholder">Click to select an audio file (MP3, WAV, OGG)</span>
+                </div>
+            </div>
+            <button type="button" class="clear-file-btn" id="clearFileBtn" style="display: none;">Remove File</button>
+            <div class="note">Upload a short audio sample (3-10 seconds) of the voice you want to clone. The quality and clarity of the sample will affect the cloning results.</div>
+        </div>
+
+        <button type="submit" id="generateBtn">Generate Audio</button>
     </form>
 
     <div id="audioControls">
@@ -138,9 +229,49 @@ Multiple languages:
         const audioControls = document.getElementById('audioControls');
         const downloadBtn = document.getElementById('downloadBtn');
         const audioInfo = document.getElementById('audioInfo');
+        const voiceFileInput = document.getElementById('voiceFile');
+        const fileDisplay = document.getElementById('fileDisplay');
+        const clearFileBtn = document.getElementById('clearFileBtn');
+        const generateBtn = document.getElementById('generateBtn');
         
         let currentBlob = null;
         let currentFormat = null;
+
+        // Handle file input display
+        voiceFileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                fileDisplay.innerHTML = `<span class="file-selected">📁 ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)</span>`;
+                clearFileBtn.style.display = 'inline-block';
+            } else {
+                resetFileDisplay();
+            }
+        });
+
+        // Handle file display click
+        fileDisplay.addEventListener('click', function() {
+            voiceFileInput.click();
+        });
+
+        // Handle clear file button
+        clearFileBtn.addEventListener('click', function() {
+            voiceFileInput.value = '';
+            resetFileDisplay();
+        });
+
+        function resetFileDisplay() {
+            fileDisplay.innerHTML = '<span class="file-placeholder">Click to select an audio file (MP3, WAV, OGG)</span>';
+            clearFileBtn.style.display = 'none';
+        }
+
+        // Validate file type
+        function isValidAudioFile(file) {
+            const validTypes = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp3'];
+            const validExtensions = ['.mp3', '.wav', '.ogg'];
+            
+            return validTypes.includes(file.type) || 
+                   validExtensions.some(ext => file.name.toLowerCase().endsWith(ext));
+        }
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -151,20 +282,50 @@ Multiple languages:
             const speed = document.getElementById('speed').value;
             const format = document.getElementById('format').value;
             const model = document.getElementById('model').value;
+            const voiceFile = voiceFileInput.files[0];
+
+            // Validate voice file if provided
+            if (voiceFile && !isValidAudioFile(voiceFile)) {
+                alert('Please select a valid audio file (MP3, WAV, or OGG).');
+                return;
+            }
 
             const apiUrl = `http://${ip}:${port}/generate`;
 
-            // Disable download button while generating
+            // Disable buttons while generating
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Generating...';
             downloadBtn.disabled = true;
             downloadBtn.textContent = 'Generating...';
 
             try {
+                let requestBody;
+                let requestHeaders = {};
+
+                if (voiceFile) {
+                    // Use FormData for file upload
+                    requestBody = new FormData();
+                    requestBody.append('text', text);
+                    requestBody.append('speed', speed);
+                    requestBody.append('format', format);
+                    requestBody.append('model', model);
+                    requestBody.append('voice', voiceFile);
+                    // Don't set Content-Type header for FormData - let browser set it with boundary
+                } else {
+                    // Use JSON for text-only request
+                    requestHeaders['Content-Type'] = 'application/json';
+                    requestBody = JSON.stringify({ 
+                        text, 
+                        speed: parseFloat(speed), 
+                        format, 
+                        model 
+                    });
+                }
+
                 const response = await fetch(apiUrl, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ text, speed: parseFloat(speed), format, model }),
+                    headers: requestHeaders,
+                    body: requestBody,
                 });
 
                 if (response.ok) {
@@ -182,15 +343,23 @@ Multiple languages:
                     
                     // Show file info
                     const fileSizeKB = (currentBlob.size / 1024).toFixed(2);
-                    audioInfo.innerHTML = `Size: ${fileSizeKB} KB | Format: ${format.toUpperCase()}`;
+                    const voiceInfo = voiceFile ? ` | Voice: ${voiceFile.name}` : ' | Voice: Default';
+                    audioInfo.innerHTML = `Size: ${fileSizeKB} KB | Format: ${format.toUpperCase()}${voiceInfo}`;
                 } else {
-                    throw new Error('Server response was not ok.');
+                    const errorText = await response.text();
+                    throw new Error(`Server error: ${response.status} - ${errorText}`);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Error generating audio. Please check the API address and try again.');
-                downloadBtn.textContent = 'Download Audio';
+                alert(`Error generating audio: ${error.message}\n\nPlease check the API address and try again.`);
                 audioInfo.innerHTML = '';
+            } finally {
+                // Re-enable generate button
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Generate Audio';
+                if (downloadBtn.textContent === 'Generating...') {
+                    downloadBtn.textContent = 'Download Audio';
+                }
             }
         });
 

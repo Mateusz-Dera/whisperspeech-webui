@@ -28,9 +28,13 @@ import re
 from datetime import datetime
 import threading
 import json
+import tempfile
+import shutil
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import parse_qs
 import socket
+import cgi
+import io
 
 import torch
 import gradio as gr
@@ -234,36 +238,137 @@ def update(m, t, s, v, af, ap):
         gr.Error(file_error)
         print(file_error)
 
+def check_extension(filename):
+    """Check if file has valid audio extension"""
+    allowed_extensions = ('.mp3', '.ogg', '.wav')
+    return filename.lower().endswith(allowed_extensions)
+
+def save_uploaded_file(file_data, filename):
+    """Save uploaded file data to a temporary file"""
+    # Create temporary directory if it doesn't exist
+    temp_dir = os.path.join(tempfile.gettempdir(), 'whisperspeech_api')
+    os.makedirs(temp_dir, exist_ok=True)
+    
+    # Generate unique filename
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S_%f')
+    file_extension = os.path.splitext(filename)[1] if filename else '.wav'
+    temp_filename = os.path.join(temp_dir, f'voice_{timestamp}{file_extension}')
+    
+    # Save file data
+    with open(temp_filename, 'wb') as f:
+        f.write(file_data)
+    
+    return temp_filename
+
+def cleanup_temp_file(filepath):
+    """Clean up temporary file"""
+    try:
+        if os.path.exists(filepath):
+            os.remove(filepath)
+            print(f"Cleaned up temporary file: {filepath}")
+    except Exception as e:
+        print(f"Error cleaning up temporary file {filepath}: {e}")
+
 # API functionality
 class WhisperSpeechHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         if self.path == '/generate':
-            content_length = int(self.headers['Content-Length'])
-            post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode('utf-8'))
+            temp_voice_file = None
+            try:
+                content_type = self.headers.get('Content-Type', '')
+                
+                if content_type.startswith('multipart/form-data'):
+                    # Handle multipart form data (file upload)
+                    form = cgi.FieldStorage(
+                        fp=self.rfile,
+                        headers=self.headers,
+                        environ={
+                            'REQUEST_METHOD': 'POST',
+                            'CONTENT_TYPE': self.headers['Content-Type'],
+                        }
+                    )
+                    
+                    # Extract form fields
+                    text = form.getvalue('text', '')
+                    speed = float(form.getvalue('speed', 13.5))
+                    audio_format = form.getvalue('format', 'wav')
+                    model_key = form.getvalue('model', args.model)
+                    
+                    # Handle uploaded voice file
+                    voice_file = None
+                    if 'voice' in form:
+                        voice_field = form['voice']
+                        if voice_field.filename and voice_field.file:
+                            # Validate file extension
+                            if not check_extension(voice_field.filename):
+                                self.send_error(400, _('Invalid file format. Please use mp3, wav, or ogg.'))
+                                return
+                            
+                            # Read file data
+                            voice_field.file.seek(0)
+                            file_data = voice_field.file.read()
+                            
+                            # Save to temporary file
+                            temp_voice_file = save_uploaded_file(file_data, voice_field.filename)
+                            voice_file = temp_voice_file
+                            print(f"Uploaded voice file saved: {temp_voice_file}")
+                    
+                elif content_type.startswith('application/json'):
+                    # Handle JSON data (no file upload)
+                    content_length = int(self.headers['Content-Length'])
+                    post_data = self.rfile.read(content_length)
+                    data = json.loads(post_data.decode('utf-8'))
+                    
+                    text = data.get('text', '')
+                    speed = data.get('speed', 13.5)
+                    audio_format = data.get('format', 'wav')
+                    model_key = data.get('model', args.model)
+                    voice_file = args.api_voice if args.api_voice else None
+                else:
+                    self.send_error(400, _('Unsupported content type.'))
+                    return
 
-            text = data.get('text', '')
-            speed = data.get('speed', 13.5)
-            audio_format = data.get('format', 'wav')
-            model_key = data.get('model', args.model)  # Use default model if not specified
+                # Map model key to full model name
+                model = MODELS.get(model_key, default_model)
 
-            # Map model key to full model name
-            model = MODELS.get(model_key, default_model)
+                # Generate audio
+                output_file = update(model, text, speed, voice_file, audio_format, False)
 
-            # Use the API voice if specified
-            voice = args.api_voice if args.api_voice else None
-
-            output_file = update(model, text, speed, voice, audio_format, False)
-
-            if output_file:
-                self.send_response(200)
-                self.send_header('Content-type', f'audio/{audio_format}')
-                self.send_header('Access-Control-Allow-Origin', '*')  # Allow CORS
-                self.end_headers()
-                with open(output_file, 'rb') as file:
-                    self.wfile.write(file.read())
-            else:
-                self.send_error(500, _('Error generating audio.'))
+                if output_file and os.path.exists(output_file):
+                    # Send response
+                    self.send_response(200)
+                    self.send_header('Content-type', f'audio/{audio_format}')
+                    self.send_header('Access-Control-Allow-Origin', '*')  # Allow CORS
+                    
+                    # Add filename to response headers
+                    filename = os.path.basename(output_file)
+                    self.send_header('Content-Disposition', f'attachment; filename="{filename}"')
+                    
+                    # Calculate file size
+                    file_size = os.path.getsize(output_file)
+                    self.send_header('Content-Length', str(file_size))
+                    
+                    self.end_headers()
+                    
+                    # Send file content
+                    with open(output_file, 'rb') as file:
+                        shutil.copyfileobj(file, self.wfile)
+                    
+                    print(f"API response sent: {output_file}")
+                else:
+                    self.send_error(500, _('Error generating audio.'))
+                    
+            except json.JSONDecodeError:
+                self.send_error(400, _('Invalid JSON data.'))
+            except ValueError as e:
+                self.send_error(400, f'{_("Invalid parameter:")} {str(e)}')
+            except Exception as e:
+                print(f"API Error: {e}")
+                self.send_error(500, f'{_("Internal server error:")} {str(e)}')
+            finally:
+                # Clean up temporary voice file
+                if temp_voice_file:
+                    cleanup_temp_file(temp_voice_file)
         else:
             self.send_error(404, _('Not found.'))
 
@@ -273,6 +378,10 @@ class WhisperSpeechHandler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
         self.end_headers()
+
+    def log_message(self, format, *args):
+        """Override to provide better logging"""
+        print(f"API Request: {self.address_string()} - {format % args}")
 
 def run_api(host, port):
     server_address = (host, port)
@@ -362,10 +471,6 @@ def find_available_port(start_port):
     while not is_port_available(port):
         port += 1
     return port
-
-def check_extension(filename):
-    allowed_extensions = ('.mp3', '.ogg', '.wav')
-    return filename.lower().endswith(allowed_extensions)
 
 # Main execution
 if __name__ == '__main__':
