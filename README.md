@@ -2,20 +2,22 @@
 Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 
 ## Info
-[![Version](https://img.shields.io/badge/3.0-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
+[![Version](https://img.shields.io/badge/4.0-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
 
 > [!Note]
-> Versions 2.x and 3.x allow voice generation via API.
+> Versions 2.x, 3.x and 4.x allow voice generation via API.
+> Version 4.x supports SillyTavern.
+> SillyTavern extension is tested on version 1.13.1
 
-### Test platform:
+### Test platforms:
 |Name|Info|
 |:---|:---|
-|CPU|AMD Ryzen 9950X3D (iGPU disabled in BIOS)|
+|CPU|AMD Ryzen 9950X3D|
 |GPU|AMD Radeon 7900XTX|
 |RAM|64GB DDR5 6600MHz|
 |Motherboard|ASRock B650E PG Riptide WiFi (BIOS 3.25)|
 |OS|Ubuntu 24.04.2 LTS|
-|Kernel|6.11.0-26-generic|
+|Kernel|6.11.0-29-generic|
 |ROCm|6.4.1|
 
 |Name|Info|
@@ -24,9 +26,9 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 |GPU|NVIDIA GeForce RTX 4050|
 |RAM|16GB DDR4 3200MHz|
 |Motherboard|GIGABYTE G5 MF (BIOS FB10)|
-|OS|Ubuntu 24.04.2 LTS|
-|Kernel|6.11.0-26-generic|
-|NVIDIA Driver|570.133.07|
+|OS|Ubuntu 25.04|
+|Kernel|6.14.0-24|
+|NVIDIA Driver|570.169|
 |CUDA|12.8|
 
 ## Instalation:
@@ -54,6 +56,18 @@ CUDA 12.8:
 ```bash
 uv run --extra cuda webui.py
 ```
+
+## SillyTavern extension:
+1\. Copy whisperspeech-webui folder to SillyTavern/public/scripts/extensions/third-party
+
+2\. Run app with api support.
+
+```bash
+# This is example. If you are using SillyTavern locally, you can remove --listen parameter.
+uv run --extra cpu webui.py --listen --api
+```
+
+3\. Launch SillyTavern. In the extensions tab, expand WhisperSpeech web UI and set the IP and port.
 
 ## GUI tanslation:
 |Languages|

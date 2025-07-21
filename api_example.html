@@ -1,6 +1,6 @@
 <!-- MIT License
 
-Copyright (c) 2024 Mateusz Dera
+Copyright (c) 2024-2025 Mateusz Dera
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,28 +31,176 @@ SOFTWARE. -->
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         form {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 15px;
         }
         label {
             font-weight: bold;
+            margin-bottom: 5px;
         }
-        input, select, button {
-            padding: 5px;
+        input, select, button, textarea {
+            padding: 8px;
             font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
         button {
             cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
         }
         .row {
             display: flex;
             gap: 10px;
         }
-        .row input {
+        .row > div {
             flex: 1;
+        }
+        .row input {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .button-row {
+            display: flex;
+            gap: 10px;
+        }
+        .button-row button {
+            flex: 1;
+        }
+        #cancelBtn {
+            background-color: #dc3545;
+            display: none;
+        }
+        #cancelBtn:hover {
+            background-color: #c82333;
+        }
+        #audioControls {
+            display: none;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        #downloadBtn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        #downloadBtn:hover {
+            background-color: #218838;
+        }
+        #downloadBtn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .audio-info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        .voice-section {
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+        .voice-section h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            width: 100%;
+        }
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+        .file-input-display {
+            display: block;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+            min-height: 20px;
+        }
+        .file-input-display:hover {
+            background-color: #f8f9fa;
+        }
+        .file-selected {
+            color: #28a745;
+        }
+        .file-placeholder {
+            color: #6c757d;
+        }
+        .clear-file-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .clear-file-btn:hover {
+            background-color: #c82333;
+        }
+        .note {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        .status-message {
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            display: none;
+        }
+        .status-message.info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        .status-message.success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .status-message.error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .status-message.warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
         }
     </style>
 </head>
@@ -86,14 +234,134 @@ Multiple languages:
             <option value="ogg">OGG</option>
         </select>
 
-        <button type="submit">Generate Audio</button>
+        <label for="model">Model:</label>
+        <select id="model" required>
+            <option value="tiny" selected>Tiny</option>
+            <option value="small">Small</option>
+            <option value="base">Base</option>
+        </select>
+
+        <div class="voice-section">
+            <h3>Voice Cloning (Optional)</h3>
+            <label for="voiceFile">Upload Voice Sample:</label>
+            <div class="file-input-wrapper">
+                <input type="file" id="voiceFile" accept=".mp3,.wav,.ogg,audio/*">
+                <div class="file-input-display" id="fileDisplay">
+                    <span class="file-placeholder">Click to select an audio file (MP3, WAV, OGG)</span>
+                </div>
+            </div>
+            <button type="button" class="clear-file-btn" id="clearFileBtn" style="display: none;">Remove File</button>
+            <div class="note">Upload a short audio sample (3-10 seconds) of the voice you want to clone. The quality and clarity of the sample will affect the cloning results.</div>
+        </div>
+
+        <div class="button-row">
+            <button type="submit" id="generateBtn">Generate Audio</button>
+            <button type="button" id="cancelBtn">Cancel</button>
+        </div>
     </form>
 
-    <audio id="audioPlayer" controls style="display: none; margin-top: 20px;"></audio>
+    <div class="status-message" id="statusMessage"></div>
+
+    <div id="audioControls">
+        <audio id="audioPlayer" controls style="width: 100%;"></audio>
+        <button id="downloadBtn" disabled>Download Audio</button>
+        <div class="audio-info" id="audioInfo"></div>
+    </div>
 
     <script>
         const form = document.getElementById('ttsForm');
         const audioPlayer = document.getElementById('audioPlayer');
+        const audioControls = document.getElementById('audioControls');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const audioInfo = document.getElementById('audioInfo');
+        const voiceFileInput = document.getElementById('voiceFile');
+        const fileDisplay = document.getElementById('fileDisplay');
+        const clearFileBtn = document.getElementById('clearFileBtn');
+        const generateBtn = document.getElementById('generateBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const statusMessage = document.getElementById('statusMessage');
+        
+        let currentBlob = null;
+        let currentFormat = null;
+        let currentTaskId = null;
+        let abortController = null;
+
+        function showStatus(message, type = 'info') {
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message ${type}`;
+            statusMessage.style.display = 'block';
+        }
+
+        function hideStatus() {
+            statusMessage.style.display = 'none';
+        }
+
+        // Handle file input display
+        voiceFileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                fileDisplay.innerHTML = `<span class="file-selected">📁 ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)</span>`;
+                clearFileBtn.style.display = 'inline-block';
+            } else {
+                resetFileDisplay();
+            }
+        });
+
+        // Handle file display click
+        fileDisplay.addEventListener('click', function() {
+            voiceFileInput.click();
+        });
+
+        // Handle clear file button
+        clearFileBtn.addEventListener('click', function() {
+            voiceFileInput.value = '';
+            resetFileDisplay();
+        });
+
+        function resetFileDisplay() {
+            fileDisplay.innerHTML = '<span class="file-placeholder">Click to select an audio file (MP3, WAV, OGG)</span>';
+            clearFileBtn.style.display = 'none';
+        }
+
+        // Validate file type
+        function isValidAudioFile(file) {
+            const validTypes = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp3'];
+            const validExtensions = ['.mp3', '.wav', '.ogg'];
+            
+            return validTypes.includes(file.type) || 
+                   validExtensions.some(ext => file.name.toLowerCase().endsWith(ext));
+        }
+
+        // Handle cancel button
+        cancelBtn.addEventListener('click', async function() {
+            if (abortController) {
+                abortController.abort();
+                showStatus('Generation cancelled by user', 'warning');
+            }
+
+            if (currentTaskId) {
+                try {
+                    const ip = document.getElementById('ip').value;
+                    const port = document.getElementById('port').value;
+                    const cancelUrl = `http://${ip}:${port}/cancel/${currentTaskId}`;
+                    
+                    await fetch(cancelUrl, { method: 'POST' });
+                    showStatus('Cancellation request sent to server', 'warning');
+                } catch (error) {
+                    console.error('Error sending cancel request:', error);
+                }
+            }
+
+            // Reset UI state
+            generateBtn.disabled = false;
+            generateBtn.textContent = 'Generate Audio';
+            cancelBtn.style.display = 'none';
+            downloadBtn.disabled = true;
+            downloadBtn.textContent = 'Download Audio';
+
+            currentTaskId = null;
+            abortController = null;
+        });
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -103,30 +371,141 @@ Multiple languages:
             const text = document.getElementById('text').value;
             const speed = document.getElementById('speed').value;
             const format = document.getElementById('format').value;
+            const model = document.getElementById('model').value;
+            const voiceFile = voiceFileInput.files[0];
+
+            // Validate voice file if provided
+            if (voiceFile && !isValidAudioFile(voiceFile)) {
+                showStatus('Please select a valid audio file (MP3, WAV, or OGG).', 'error');
+                return;
+            }
 
             const apiUrl = `http://${ip}:${port}/generate`;
 
+            // Create abort controller for cancellation
+            abortController = new AbortController();
+
+            // Update UI for generation state
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Generating...';
+            cancelBtn.style.display = 'block';
+            downloadBtn.disabled = true;
+            downloadBtn.textContent = 'Generating...';
+            hideStatus();
+
+            showStatus('Starting audio generation...', 'info');
+
             try {
+                let requestBody;
+                let requestHeaders = {};
+
+                if (voiceFile) {
+                    // Use FormData for file upload
+                    requestBody = new FormData();
+                    requestBody.append('text', text);
+                    requestBody.append('speed', speed);
+                    requestBody.append('format', format);
+                    requestBody.append('model', model);
+                    requestBody.append('voice', voiceFile);
+                    // Don't set Content-Type header for FormData - let browser set it with boundary
+                } else {
+                    // Use JSON for text-only request
+                    requestHeaders['Content-Type'] = 'application/json';
+                    requestBody = JSON.stringify({ 
+                        text, 
+                        speed: parseFloat(speed), 
+                        format, 
+                        model 
+                    });
+                }
+
                 const response = await fetch(apiUrl, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ text, speed: parseFloat(speed), format }),
+                    headers: requestHeaders,
+                    body: requestBody,
+                    signal: abortController.signal
                 });
 
+                // Extract task ID from response headers
+                currentTaskId = response.headers.get('X-Task-ID');
+
                 if (response.ok) {
-                    const blob = await response.blob();
-                    const url = URL.createObjectURL(blob);
+                    currentBlob = await response.blob();
+                    currentFormat = format;
+                    
+                    const url = URL.createObjectURL(currentBlob);
                     audioPlayer.src = url;
-                    audioPlayer.style.display = 'block';
+                    audioControls.style.display = 'block';
                     audioPlayer.play();
+                    
+                    // Enable download button
+                    downloadBtn.disabled = false;
+                    downloadBtn.textContent = `Download ${format.toUpperCase()}`;
+                    
+                    // Show file info
+                    const fileSizeKB = (currentBlob.size / 1024).toFixed(2);
+                    const voiceInfo = voiceFile ? ` | Voice: ${voiceFile.name}` : ' | Voice: Default';
+                    audioInfo.innerHTML = `Size: ${fileSizeKB} KB | Format: ${format.toUpperCase()}${voiceInfo}`;
+                    
+                    showStatus('Audio generated successfully!', 'success');
+                    
+                    // Auto-hide success message after 3 seconds
+                    setTimeout(() => {
+                        hideStatus();
+                    }, 3000);
+                    
+                } else if (response.status === 499) {
+                    // Task was cancelled
+                    const errorData = await response.json();
+                    showStatus(`Generation cancelled: ${errorData.error || 'Unknown error'}`, 'warning');
                 } else {
-                    throw new Error('Server response was not ok.');
+                    const errorText = await response.text();
+                    throw new Error(`Server error: ${response.status} - ${errorText}`);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Error generating audio. Please check the API address and try again.');
+                
+                if (error.name === 'AbortError') {
+                    showStatus('Generation cancelled by user', 'warning');
+                } else {
+                    showStatus(`Error generating audio: ${error.message}\n\nPlease check the API address and try again.`, 'error');
+                }
+                
+                audioInfo.innerHTML = '';
+            } finally {
+                // Reset UI state
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Generate Audio';
+                cancelBtn.style.display = 'none';
+                
+                if (downloadBtn.textContent === 'Generating...') {
+                    downloadBtn.textContent = 'Download Audio';
+                }
+                
+                currentTaskId = null;
+                abortController = null;
+            }
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            if (currentBlob && currentFormat) {
+                // Create download link
+                const url = URL.createObjectURL(currentBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                
+                // Generate filename with timestamp
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-').split('T')[0] + '_' + 
+                                new Date().toTimeString().split(' ')[0].replace(/:/g, '-');
+                a.download = `whisperspeech_${timestamp}.${currentFormat}`;
+                
+                // Trigger download
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                // Clean up
+                setTimeout(() => URL.revokeObjectURL(url), 100);
             }
         });
     </script>

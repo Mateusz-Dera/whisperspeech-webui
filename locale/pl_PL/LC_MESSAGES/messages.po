@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-06-19 19:57+0200\n"
+"POT-Creation-Date: 2025-06-26 12:27+0200\n"
 "PO-Revision-Date: 2024-10-23 12:28+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pl_PL\n"
@@ -19,117 +19,141 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.16.0\n"
 
-#: webui.py:68
+#: webui.py:73
 #, python-format
 msgid "This is a simple web UI for the %s project."
 msgstr "Prosty interfejs dla %s."
 
-#: webui.py:69 webui.py:356
+#: webui.py:74 webui.py:580
 msgid "Version:"
 msgstr "Wersja:"
 
-#: webui.py:93 webui.py:99
+#: webui.py:98 webui.py:104
 msgid "<port>"
 msgstr "<port>"
 
-#: webui.py:93
+#: webui.py:98
 msgid "Specify the server port for the GUI."
 msgstr "Podaj port dla interfejsu."
 
-#: webui.py:94
+#: webui.py:99
 msgid "<u>:<p>"
 msgstr "<u>:<h>"
 
-#: webui.py:94
+#: webui.py:99
 msgid "Enter the username <u> and password <p> for authorization."
 msgstr "Podaj użytkownika <u> i hasło <h> do autoryzacji."
 
-#: webui.py:95
+#: webui.py:100
 msgid "Host the app on the local network."
 msgstr "Udostępnij aplikację w sieci lokalnej."
 
-#: webui.py:96
+#: webui.py:101
 msgid "Create a public sharing tunnel."
 msgstr "Utwórz tunel publiczny do udostępniania aplikacji."
 
-#: webui.py:97
+#: webui.py:102
 msgid "Show this help message and exit."
 msgstr "Pokaż tą wiadomość z pomocą i zakończ program."
 
-#: webui.py:98
+#: webui.py:103
 msgid "Enable API mode."
 msgstr "Włącz API."
 
-#: webui.py:99
+#: webui.py:104
 msgid "Specify the server port for the API."
 msgstr "Podaj port dla API."
 
-#: webui.py:100
+#: webui.py:105
 msgid "Select the default model tiny/small/base."
 msgstr "Wybierz domyślny model najmniejszy/mały/bazowy"
 
-#: webui.py:101
+#: webui.py:106
 msgid "<path>"
 msgstr "<ścieżka>"
 
-#: webui.py:101
+#: webui.py:106
 msgid ""
 "Specify the path to an mp3, wav, or ogg file for voice cloning when using"
 " the API."
 msgstr "Podaj ścieżkę do pliku mp3, wav lub ogg z głosem do sklonowania."
 
-#: webui.py:117
+#: webui.py:122
 #, python-format
 msgid "Loading model: %s"
 msgstr "Ładowanie modelu: %s"
 
-#: webui.py:124
+#: webui.py:129
 msgid "No ROCm/CUDA device available."
 msgstr "Nie wykryto użądzenia wspierającego ROCm/CUDA."
 
-#: webui.py:128
+#: webui.py:133
 msgid "ROCm/CUDA device available."
 msgstr "Użądzenie wspierające ROCm/CUDA jest dostępne."
 
-#: webui.py:230
+#: webui.py:235
 #, python-format
 msgid "Audio file generated: %s"
 msgstr "Wygenerowano plik audio: %s"
 
-#: webui.py:233
+#: webui.py:238
 msgid "Error:"
 msgstr "Błąd:"
 
-#: webui.py:262
+#: webui.py:368
+msgid "No boundary found in multipart request."
+msgstr "Nie znaleziono granicy w żądaniu multipart."
+
+#: webui.py:392
+msgid "Invalid file format. Please use mp3, wav, or ogg."
+msgstr "Nieprawidłowy format pliku. Proszę użyć mp3, wav lub ogg."
+
+#: webui.py:412
+msgid "Unsupported content type."
+msgstr "Nieobsługiwany typ zawartości."
+
+#: webui.py:443
 msgid "Error generating audio."
 msgstr "Błąd generowania audio."
 
-#: webui.py:264
+#: webui.py:446
+msgid "Invalid JSON data."
+msgstr "Nieprawidłowe dane JSON."
+
+#: webui.py:448
+msgid "Invalid parameter:"
+msgstr "Nieprawidłowy parametr:"
+
+#: webui.py:451
+msgid "Internal server error:"
+msgstr "Wewnętrzny błąd serwera:"
+
+#: webui.py:457 webui.py:483
 msgid "Not found."
 msgstr "Nie znaleziono."
 
-#: webui.py:276
+#: webui.py:492
 #, python-format
 msgid "API running on http://%s:%s"
 msgstr "Interfejs API dostępny pod adresem http://%s:%s"
 
-#: webui.py:282
+#: webui.py:498
 msgid "WhisperSpeech Web UI"
 msgstr "WhisperSpeech Web UI"
 
-#: webui.py:290
+#: webui.py:506
 msgid "Model"
 msgstr "Model"
 
-#: webui.py:293
+#: webui.py:509
 msgid "Enter your text here..."
 msgstr "Wpisz swój tekst tutaj..."
 
-#: webui.py:294
+#: webui.py:510
 msgid "Text"
 msgstr "Tekst"
 
-#: webui.py:298
+#: webui.py:514
 msgid ""
 "You can use the *&lt;en&gt;* and *&lt;pl&gt;* tags to change languages "
 "and even combine them."
@@ -137,60 +161,64 @@ msgstr ""
 "Możesz używać znaczników *&lt;en&gt;* oraz *&lt;pl&gt;* do przełączania "
 "się między językami lub łączenia ich."
 
-#: webui.py:299
+#: webui.py:515
 msgid "Combining languages can produce mixed results."
 msgstr "Łączenie różnych języków może dawać mieszane rezultaty."
 
-#: webui.py:300
+#: webui.py:516
 msgid "Example:"
 msgstr "Przykład:"
 
-#: webui.py:304
+#: webui.py:520
 msgid "Characters per second"
 msgstr "Znaki na sekundę"
 
-#: webui.py:313
+#: webui.py:529
 msgid "Voice to clone (optional)"
 msgstr "Głos do sklonowania (opcjonalny)"
 
-#: webui.py:325
+#: webui.py:541
 msgid "Audio format"
 msgstr "Format audio"
 
-#: webui.py:327
+#: webui.py:544
 msgid "Generate"
-msgstr "Generowanie"
+msgstr "Generuj"
 
-#: webui.py:330
+#: webui.py:546
+msgid "Autoplay"
+msgstr "Autoodtwarzanie"
+
+#: webui.py:552
 msgid "Output"
 msgstr "Wyjście"
 
-#: webui.py:364
+#: webui.py:588
 #, python-format
 msgid "Port %s is busy. Using port %s instead."
 msgstr "Port %s jest zajęty. W zamian zostanie użyty port %s."
 
-#: webui.py:370
+#: webui.py:594
 msgid "The specified voice file does not exist."
 msgstr "Podany plik z głosem do sklonowania nie istnieje."
 
-#: webui.py:374
+#: webui.py:598
 msgid "The specified voice file must be in mp3, wav, or ogg format."
 msgstr "Plik z glosem do sklonowania musli być w formacie mp3, wav lub ogg."
 
-#: webui.py:381
+#: webui.py:605
 #, python-format
 msgid "API port %s is busy. Using port %s instead."
 msgstr "Port %s jest zajęty. W zamian dla API zostanie użyty port %s."
 
-#: webui.py:384
+#: webui.py:608
 #, python-format
 msgid "API port %s is the same as the GUI port. Using port %s instead."
 msgstr ""
 "Podany port %s dla API jest już zajęty przez interfejs. W zamian dla API "
 "zostanie użyty port %s."
 
-#: webui.py:399
+#: webui.py:623
 msgid "Invalid username and/or password."
 msgstr "Nieprawidłowy użytkownik i/lub hasło."
 
