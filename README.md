@@ -8,10 +8,7 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 > Versions 2.x, 3.x and 4.x allow voice generation via API.
 
 > [!Note]
-> Version 4.x supports SillyTavern.
-
-> [!Note]
-> SillyTavern extension is tested on version 1.13.1
+> Version 4.x supports SillyTavern (1.13.1).
 
 ### Test platforms:
 |Name|Info|
