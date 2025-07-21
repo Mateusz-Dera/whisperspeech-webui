@@ -4,9 +4,13 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 ## Info
 [![Version](https://img.shields.io/badge/4.0-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
 
-> [!Note]
+> [!Info]
 > Versions 2.x, 3.x and 4.x allow voice generation via API.
+
+> [!Info]
 > Version 4.x supports SillyTavern.
+
+> [!Info]
 > SillyTavern extension is tested on version 1.13.1
 
 ### Test platforms:
