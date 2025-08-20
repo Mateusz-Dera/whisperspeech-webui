@@ -39,7 +39,11 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 
 3\. Mount the repository directory.
 
-3\. Create and activate venv using uv.
+3\. Create and activate venv using uv:
+```bash
+uv venv --python 3.12
+source .venv/bin/activate
+```
 
 4\. Run webui.py:
 
@@ -48,7 +52,7 @@ CPU (not recommended):
 uv run --extra cpu webui.py
 ```
 
-ROCm 6.4:
+ROCm 6.3:
 ```bash
 uv run --extra rocm webui.py
 ```

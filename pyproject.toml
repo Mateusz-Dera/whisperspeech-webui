@@ -14,16 +14,16 @@ dependencies = [
 
 [project.optional-dependencies]
 cpu = [
-    "torch==2.8.0", 
-    "torchaudio==2.8.0"
+    "torch==2.7.1", 
+    "torchaudio==2.7.1"
 ]
 cuda = [
-    "torch==2.8.0", 
-    "torchaudio==2.8.0"
+    "torch==2.7.1", 
+    "torchaudio==2.7.1"
 ]
 rocm = [
-    "torch==2.8.0",
-    "torchaudio==2.8.0",
+    "torch==2.7.1",
+    "torchaudio==2.7.1",
     "pytorch-triton-rocm"
 ]
 
@@ -65,5 +65,5 @@ explicit = true
 
 [[tool.uv.index]]
 name = "pytorch-rocm"
-url = "https://download.pytorch.org/whl/rocm6.4"
+url = "https://download.pytorch.org/whl/rocm6.3"
 explicit = true
