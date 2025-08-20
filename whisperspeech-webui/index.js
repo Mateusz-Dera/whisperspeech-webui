@@ -1783,6 +1783,11 @@ function addQueueControlButton() {
     // Insert the button right after the options button
     optionsButton.parentNode.insertBefore(queueButton, optionsButton.nextSibling);
     
+    // Hide button initially if extension is disabled
+    if (!extension_settings[extensionName] || !extension_settings[extensionName].enabled) {
+        queueButton.style.display = 'none';
+    }
+    
     console.log("Added queue control button next to options button");
 }
 
@@ -2021,8 +2026,10 @@ jQuery(async () => {
         // Add or remove Generate buttons based on enabled state
         if (extension_settings[extensionName].enabled) {
             addGenerateButtons();
+            $("#whisperspeech_queue_button").show();
         } else {
             $(".whisperspeech_generate_btn").remove();
+            $("#whisperspeech_queue_button").hide();
         }
     });
     
