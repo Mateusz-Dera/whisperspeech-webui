@@ -2,7 +2,7 @@
 Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 
 ## Info
-[![Version](https://img.shields.io/badge/version-4.1-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
+[![Version](https://img.shields.io/badge/Version-4.1-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
 
 > [!Note]
 > Versions 2.x, 3.x and 4.x allow voice generation via API.
@@ -41,7 +41,7 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 
 3\. Create and activate venv using uv:
 ```bash
-uv venv --python 3.12
+uv venv --python 3.13
 source .venv/bin/activate
 ```
 

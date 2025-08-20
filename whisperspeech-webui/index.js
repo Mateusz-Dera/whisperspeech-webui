@@ -1465,7 +1465,7 @@ async function handleGenerateClick(event) {
                     audioPlayers[result.requestIndex] = audioPlayer[0];
                     
                     // Update queue with newly available audio immediately (streaming approach)
-                    if (extension_settings[extensionName].auto_generation) {
+                    if (extension_settings[extensionName].enabled && extension_settings[extensionName].auto_generation) {
                         const messageTimestamp = getMessageTimestamp(messageContainer);
                         console.log(`Updating queue with audio ${result.requestIndex + 1} for message ${messageId}`);
                         updateAudioInQueue(messageId, audioPlayers, messageContainer, messageTimestamp);
@@ -1551,7 +1551,7 @@ async function handleGenerateClick(event) {
             }
             
             // Add to global audio queue for auto-play if needed
-            if (extension_settings[extensionName].auto_generation && audioPlayers.length > 0) {
+            if (extension_settings[extensionName].enabled && extension_settings[extensionName].auto_generation && audioPlayers.length > 0) {
                 const messageTimestamp = getMessageTimestamp(messageContainer);
                 addToAudioQueue(messageId, audioPlayers, messageContainer, messageTimestamp);
             }
@@ -2030,6 +2030,70 @@ jQuery(async () => {
         } else {
             $(".whisperspeech_generate_btn").remove();
             $("#whisperspeech_queue_button").hide();
+            
+            // Stop all audio playback immediately
+            pauseAudioQueue();
+            
+            // Force stop all audio processing
+            isPlayingQueue = false;
+            isPaused = false;
+            currentlyPlayingMessage = null;
+            pausedAudioElement = null;
+            pausedPosition = 0;
+            
+            // Clear audio queue completely
+            globalAudioQueue = [];
+            
+            // Stop and remove all audio elements more thoroughly
+            const allAudioElements = document.querySelectorAll('audio');
+            for (const audio of allAudioElements) {
+                audio.pause();
+                audio.currentTime = 0;
+                audio.src = '';
+                audio.load();
+            }
+            
+            // Also stop any Web Audio API contexts if they exist
+            if (window.AudioContext || window.webkitAudioContext) {
+                try {
+                    const contexts = [];
+                    if (window.audioContexts) {
+                        contexts.push(...window.audioContexts);
+                    }
+                    contexts.forEach(ctx => {
+                        if (ctx.state !== 'closed') {
+                            ctx.close().catch(() => {});
+                        }
+                    });
+                } catch (e) {
+                    console.log('Error closing audio contexts:', e);
+                }
+            }
+            
+            // Remove all whisperspeech_audio_header elements
+            $(".whisperspeech_audio_header").remove();
+            
+            // Clear all generated audio files and revoke blob URLs
+            const audioElements = $("audio");
+            audioElements.each(function() {
+                const src = $(this).attr('src');
+                if (src && src.startsWith('blob:')) {
+                    URL.revokeObjectURL(src);
+                }
+            });
+            
+            // Remove all whisperspeech audio elements and containers
+            $("audio[src*='whisperspeech']").remove();
+            $("audio[src*='blob:']").remove();
+            $(".whisperspeech_audio_container").remove();
+            
+            // Clear any cached audio data from memory
+            if (window.whisperspeechAudioCache) {
+                window.whisperspeechAudioCache.clear();
+            }
+            
+            // Clear all generation states
+            messageGenerationStates.clear();
         }
     });
     
@@ -2404,8 +2468,8 @@ jQuery(async () => {
                 audioPlayer.attr("src", audioUrl);
                 audioDiv.show();
                 
-                // Only auto-play if "Auto-play generated audio" is enabled
-                if (extension_settings[extensionName].auto_generation) {
+                // Only auto-play if extension and "Auto-play generated audio" are enabled
+                if (extension_settings[extensionName].enabled && extension_settings[extensionName].auto_generation) {
                     audioPlayer[0].play().catch(e => {
                         console.log("Auto-play was prevented:", e);
                     });
