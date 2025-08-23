@@ -1,12 +1,12 @@
 [project]
 name = "whisperspeech-webui"
-version = "4.0.0"
+version = "4.1.0"
 description = "Web UI for WhisperSpeech"
 readme = "README.md"
-requires-python = ">=3.12,<3.13"
+requires-python = ">=3.13,<3.14"
 dependencies = [
     "babel==2.16.0",
-    "gradio==5.34.1",
+    "gradio==5.43.1",
     "rich-argparse==1.7.1",
     "webdataset==0.2.111",
     "whisperspeech==0.8.9",

@@ -2,13 +2,13 @@
 Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 
 ## Info
-[![Version](https://img.shields.io/badge/4.0-version-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
+[![Version](https://img.shields.io/badge/Version-4.1-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
 
 > [!Note]
 > Versions 2.x, 3.x and 4.x allow voice generation via API.
 
 > [!Note]
-> Version 4.x supports SillyTavern (1.13.1)
+> Version 4.x supports SillyTavern (1.13.2)
 
 ### Test platforms:
 |Name|Info|
@@ -16,10 +16,10 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 |CPU|AMD Ryzen 9950X3D|
 |GPU|AMD Radeon 7900XTX|
 |RAM|64GB DDR5 6600MHz|
-|Motherboard|ASRock B650E PG Riptide WiFi (BIOS 3.25)|
+|Motherboard|ASRock B650E PG Riptide WiFi (BIOS 3.30)|
 |OS|Ubuntu 24.04.2 LTS|
-|Kernel|6.11.0-29-generic|
-|ROCm|6.4.1|
+|Kernel|6.14.0-28-generic|
+|ROCm|6.4.3|
 
 |Name|Info|
 |:---|:---|
@@ -28,7 +28,7 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 |RAM|16GB DDR4 3200MHz|
 |Motherboard|GIGABYTE G5 MF (BIOS FB10)|
 |OS|Ubuntu 25.04|
-|Kernel|6.14.0-24|
+|Kernel|6.14.0-28-generic|
 |NVIDIA Driver|570.169|
 |CUDA|12.8|
 
@@ -39,7 +39,11 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 
 3\. Mount the repository directory.
 
-3\. Create and activate venv using uv.
+3\. Create and activate venv using uv:
+```bash
+uv venv --python 3.13
+source .venv/bin/activate
+```
 
 4\. Run webui.py:
 
