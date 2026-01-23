@@ -30,7 +30,7 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 |OS|Debian 13.3|
 |Kernel|6.12.48+deb13-amd64|
 |NVIDIA Driver|590.48.01|
-|CUDA|13.0|
+|CUDA|13.1|
 
 ## Instalation:
 1\. Install uv and ffmpeg.
