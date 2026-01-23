@@ -5,3 +5,4 @@ WhisperSpeech/
 *ogg
 ~
 run.sh
+uv.lock
