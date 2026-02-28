@@ -47,7 +47,7 @@ from rich_argparse import RichHelpFormatter
 from whisperspeech.pipeline import Pipeline
 
 # Version
-version = '4.2'
+version = '4.2.1'
 
 # CSS
 css = '''

@@ -5,7 +5,7 @@
     "optional": [],
     "js": "index.js",
     "author": "Mateusz Dera",
-    "version": "4.2",
+    "version": "4.2.1",
     "homePage": "https://github.com/Mateusz-Dera/whisperspeech-webui",
     "auto_load": true,
     "description": "WhisperSpeech web UI API connector."
