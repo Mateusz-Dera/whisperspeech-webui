@@ -666,7 +666,6 @@ def run_api(host, port):
 # Gradio UI setup
 with gr.Blocks(
     title=(_('WhisperSpeech Web UI')),
-    css=css
     ) as demo:
 
     with gr.Row():
@@ -795,9 +794,9 @@ if __name__ == '__main__':
             print(_('Invalid username and/or password.'))
             sys.exit(1)
 
-        demo.launch(server_port=port, server_name=host, auth=(user,password), share=args.share)
+        demo.launch(server_port=port, server_name=host, auth=(user,password), share=args.share, css=css)
     else:
-        demo.launch(server_port=port, server_name=host, share=args.share)
+        demo.launch(server_port=port, server_name=host, share=args.share, css=css)
 
     # If API is running, wait for it to finish
     if args.api:
