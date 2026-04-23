@@ -2,7 +2,7 @@
 Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 
 ## Info
-[![Version](https://img.shields.io/badge/Version-4.2.1-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
+[![Version](https://img.shields.io/badge/Version-4.2.2-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
 
 > [!Note]
 > Versions 2.x, 3.x and 4.x allow voice generation via API.
@@ -17,9 +17,9 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 |GPU|AMD Radeon 7900XTX|
 |RAM|64GB DDR5 6600MHz|
 |Motherboard|Gigabyte X870 AORUS ELITE WIFI7 (BIOS F8)|
-|OS|Debian 13.3|
-|Kernel|6.12.63+deb13-amd64|
-|ROCm|7.2|
+|OS|Debian 13.4|
+|Kernel|6.12.74+deb13+1-amd64|
+|ROCm|7.2.2|
 
 |Name|Info|
 |:---|:---|
