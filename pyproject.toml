@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13,<3.14"
 dependencies = [
     "babel==2.17.0",
-    "gradio==6.3.0",
+    "gradio==6.13.0",
     "rich-argparse==1.7.2",
     "webdataset==1.0.2",
     "ipython==9.9.0",
@@ -21,6 +21,7 @@ cpu = [
 cuda = [
     "torch",
     "torchaudio",
+    "triton",
     "whisperspeech==0.8.9",
 ]
 rocm = [
@@ -44,6 +45,7 @@ torchaudio = [
 ]
 
 triton = [
+    { index = "pytorch-cuda", extra = "cuda" },
     { index = "pytorch-rocm", extra = "rocm" }
 ]
 
