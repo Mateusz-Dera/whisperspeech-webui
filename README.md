@@ -2,7 +2,7 @@
 Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 
 ## Info
-[![Version](https://img.shields.io/badge/Version-4.2.2-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
+[![Version](https://img.shields.io/badge/Version-4.3-orange.svg)](https://github.com/Mateusz-Dera/WhisperSpeech-Web-UI/blob/main/README.md)
 
 > [!Note]
 > Versions 2.x, 3.x and 4.x allow voice generation via API.
@@ -19,7 +19,7 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 |Motherboard|Gigabyte X870 AORUS ELITE WIFI7 (BIOS F8)|
 |OS|Debian 13.4|
 |Kernel|6.12.74+deb13+1-amd64|
-|ROCm|7.2.2|
+|ROCm|7.2.3|
 
 |Name|Info|
 |:---|:---|
@@ -27,10 +27,10 @@ Web UI for WhisperSpeech (https://github.com/collabora/WhisperSpeech)
 |GPU|NVIDIA GeForce RTX 4050|
 |RAM|16GB DDR4 3200MHz|
 |Motherboard|GIGABYTE G5 MF (BIOS FB10)|
-|OS|Debian 13.3|
-|Kernel|6.12.48+deb13-amd64|
-|NVIDIA Driver|590.48.01|
-|CUDA|13.1|
+|OS|CachyOS|
+|Kernel|6.19.12-1-cachyos|
+|NVIDIA Driver|595.58.03|
+|CUDA|13.2|
 
 ## Instalation:
 1\. Install uv and ffmpeg.
@@ -52,12 +52,12 @@ CPU (not recommended):
 uv run --extra cpu webui.py
 ```
 
-ROCm 7.2:
+ROCm 7.2.3:
 ```bash
 uv run --extra rocm webui.py
 ```
 
-CUDA 13.0:
+CUDA 13.2:
 ```bash
 uv run --extra cuda webui.py
 ```

@@ -1,6 +1,6 @@
 [project]
 name = "whisperspeech-webui"
-version = "4.2.2"
+version = "4.3"
 description = "Web UI for WhisperSpeech"
 readme = "README.md"
 requires-python = ">=3.13,<3.14"
@@ -63,10 +63,10 @@ explicit = true
 
 [[tool.uv.index]]
 name = "pytorch-cuda"
-url = "https://download.pytorch.org/whl/cu130"
+url = "https://download.pytorch.org/whl/nightly/cu132"
 explicit = true
 
 [[tool.uv.index]]
 name = "pytorch-rocm"
-url = "https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2.2/"
+url = "https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2.3/"
 format = "flat"
